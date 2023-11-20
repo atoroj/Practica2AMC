@@ -11,6 +11,6 @@ package com.amc.practica2amc;
 public class Practica2AMC {
 
     public static void main(String[] args) {
-        System.out.println("Cambio carlos");
+        System.out.println("Cambio carlos PC");
     }
 }
