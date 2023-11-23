@@ -8,12 +8,12 @@ package Vista;
  *
  * @author Usuario
  */
-public class VistaPrincipal extends javax.swing.JFrame {
+public class VistaPrincipalFrame extends javax.swing.JFrame {
 
     /**
      * Creates new form VistaPrincipal
      */
-    public VistaPrincipal() {
+    public VistaPrincipalFrame() {
         initComponents();
     }
 

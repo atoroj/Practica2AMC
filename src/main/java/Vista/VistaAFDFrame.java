@@ -8,12 +8,12 @@ package Vista;
  *
  * @author Usuario
  */
-public class VistaAFD extends javax.swing.JFrame {
+public class VistaAFDFrame extends javax.swing.JFrame {
 
     /**
      * Creates new form VistaAFD
      */
-    public VistaAFD() {
+    public VistaAFDFrame() {
         initComponents();
     }
 

@@ -4,9 +4,9 @@
  */
 package Controlador;
 
-import Vista.VistaAFD;
-import Vista.VistaAFND;
-import Vista.VistaPrincipal;
+import Vista.VistaAFDFrame;
+import Vista.VistaAFNDFrame;
+import Vista.VistaPrincipalFrame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -16,11 +16,12 @@ import java.awt.event.ActionListener;
  */
 public class ControladorPrincipal implements ActionListener {
 
-    private VistaPrincipal vistaPrincipal;
-    private VistaAFD vistaAFD;
-    private VistaAFND vistaAFND;
+    private ControladorAFD controladorAFD;
+    private VistaPrincipalFrame vistaPrincipal;
+    private VistaAFDFrame vistaAFD;
+    private VistaAFNDFrame vistaAFND;
 
-    public ControladorPrincipal(VistaPrincipal view) {
+    public ControladorPrincipal(VistaPrincipalFrame view) {
         this.vistaPrincipal = view;
 
         this.vistaPrincipal.btnAFD.addActionListener(this);
