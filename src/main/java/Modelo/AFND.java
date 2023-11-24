@@ -6,12 +6,14 @@ import java.util.ArrayList;
 
 public class AFND implements IAutomataFinitoNoDeterminista {
 
-    private Estado[] estadosFinales; 
+    private ArrayList<Estado> estadosFinales; 
     private ArrayList<TransicionAFND> transiciones; 
     private ArrayList<TransicionLamba> transicionesLamba; 
 
-    public AFND() {
-
+    public AFND(ArrayList<Estado> estadosFinales, ArrayList<TransicionAFND> transiciones, ArrayList<TransicionLamba> transicionesLamba) {
+        this.estadosFinales = estadosFinales;
+        this.transiciones = transiciones;
+        this.transicionesLamba = transicionesLamba;
     }
 
     public void agregarTransicion(Estado e1, char simbolo, Estado[] e2) {
@@ -22,23 +24,23 @@ public class AFND implements IAutomataFinitoNoDeterminista {
 
     }
 
-    private Estado[] transicion(Estado estado, char simbolo) {
+    private ArrayList<Estado> transicion(Estado estado, char simbolo) {
         return null;
     }
 
-    public Estado[] transicion(Estado[] macroestado, char simbolo) {
+    public ArrayList<Estado> transicion(ArrayList<Estado> macroestado, char simbolo) {
         return null;
     }
 
-    public Estado[] transicionLamda(Estado estado) {
+    public ArrayList<Estado> transicionLamda(Estado estado) {
         return null;
     }
 
-    public boolean esFinal(Estado[] macroestado) {
+    public boolean esFinal(ArrayList<Estado> macroestado) {
         return false;
     }
 
-    private Estado[] lamda_clausura(Estado[] macroestado) {
+    private ArrayList<Estado> lamda_clausura(Estado[] macroestado) {
         return null;
     }
 
@@ -46,7 +48,7 @@ public class AFND implements IAutomataFinitoNoDeterminista {
     public boolean reconocer(String cadena) {
         char[] simbolo = cadena.toCharArray();
         Estado[] estado = null; 
-        Estado[] macroestado = lamda_clausura(estado);
+        ArrayList<Estado> macroestado = lamda_clausura(estado);
         for (int i = 0; i < simbolo.length; i++) {
             macroestado = transicion(macroestado, simbolo[i]);
         }

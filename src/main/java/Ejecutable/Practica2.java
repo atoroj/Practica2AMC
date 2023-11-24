@@ -10,6 +10,5 @@ public class Practica2 {
         ControladorPrincipal controladorPrincipal = new ControladorPrincipal(vistaPrincipal);
         
         controladorPrincipal.iniciar();
-        System.out.println("hola mundo");
     }
 }

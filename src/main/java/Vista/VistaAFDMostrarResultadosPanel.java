@@ -1,6 +1,6 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package Vista;
 
@@ -8,12 +8,12 @@ package Vista;
  *
  * @author Usuario
  */
-public class VistaAFDFrame extends javax.swing.JFrame {
+public class VistaAFDMostrarResultadosPanel extends javax.swing.JPanel {
 
     /**
-     * Creates new form VistaAFD
+     * Creates new form VistaAFDMostrarDatosPanel
      */
-    public VistaAFDFrame() {
+    public VistaAFDMostrarResultadosPanel() {
         initComponents();
     }
 
@@ -26,10 +26,8 @@ public class VistaAFDFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 400, Short.MAX_VALUE)
@@ -38,8 +36,6 @@ public class VistaAFDFrame extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 300, Short.MAX_VALUE)
         );
-
-        pack();
     }// </editor-fold>//GEN-END:initComponents
 
 

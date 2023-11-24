@@ -6,11 +6,12 @@ import java.util.ArrayList;
 
 public class AFD implements IAutomataFinitoDeterminista {
 
-    private int[] estadosFinales; 
-    private ArrayList<TransicionAFD> transiciones; 
+    private ArrayList<Estado> estadosFinales;
+    private ArrayList<TransicionAFD> transiciones;
 
-    public AFD() {
-
+    public AFD(ArrayList<Estado> estadosFinales, ArrayList<TransicionAFD> transiciones) {
+        this.estadosFinales = estadosFinales;
+        this.transiciones = transiciones;
     }
 
     public void agregarTransicion(Estado e1, char simbolo, Estado e2) {
@@ -24,7 +25,7 @@ public class AFD implements IAutomataFinitoDeterminista {
     @Override
     public boolean reconocer(String cadena) {
         char[] simbolo = cadena.toCharArray();
-        Estado estado = null; 
+        Estado estado = null;
         for (int i = 0; i < simbolo.length; i++) {
             estado = transicion(estado, simbolo[i]);
         }
