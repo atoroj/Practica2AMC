@@ -8,8 +8,10 @@ import Vista.VistaAFDCargarDatosPanel;
 import Vista.VistaAFDFrame;
 import Vista.VistaAFDPrincipalPanel;
 import Vista.VistaAFDCargarFicheroPanel;
+import Vista.VistaAFDComprobarCadenaPanel;
 import Vista.VistaAFDMostrarResultadosPanel;
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JPanel;
@@ -25,6 +27,7 @@ public class ControladorAFD implements ActionListener {
     private VistaAFDCargarFicheroPanel vistaAFDCargarFicheroPanel;
     private VistaAFDCargarDatosPanel vistaAFDCargarDatosPanel;
     private VistaAFDMostrarResultadosPanel vistaAFDMostrarResultadosPanel;
+    private VistaAFDComprobarCadenaPanel vistaAFDComprobarCadenaPanel;
 
     public ControladorAFD() {
         vistaAFDFrame = new VistaAFDFrame();
@@ -32,15 +35,23 @@ public class ControladorAFD implements ActionListener {
         vistaAFDCargarFicheroPanel = new VistaAFDCargarFicheroPanel();
         vistaAFDMostrarResultadosPanel = new VistaAFDMostrarResultadosPanel();
         vistaAFDCargarDatosPanel = new VistaAFDCargarDatosPanel();
-
-        this.vistaAFDPrincipalPanel.setSize(vistaAFDFrame.getSize());
-        this.vistaAFDPrincipalPanel.setLocation(vistaAFDFrame.getLocation());
+        vistaAFDComprobarCadenaPanel = new VistaAFDComprobarCadenaPanel();
 
         addActionListener();
 
-        this.vistaAFDFrame.add(this.vistaAFDPrincipalPanel, BorderLayout.CENTER);
-        this.vistaAFDFrame.add(vistaAFDCargarFicheroPanel, BorderLayout.CENTER);
-        this.vistaAFDFrame.add(vistaAFDCargarDatosPanel, BorderLayout.CENTER);
+        this.vistaAFDFrame.setVisible(true);
+        this.vistaAFDFrame.getContentPane().setLayout(new CardLayout());
+        this.vistaAFDFrame.add(this.vistaAFDPrincipalPanel);
+        this.vistaAFDFrame.add(vistaAFDCargarFicheroPanel);
+        this.vistaAFDFrame.add(vistaAFDCargarDatosPanel);
+        this.vistaAFDFrame.add(vistaAFDMostrarResultadosPanel);
+        this.vistaAFDFrame.add(vistaAFDComprobarCadenaPanel);
+        this.vistaAFDFrame.setLocationRelativeTo(null);
+
+        this.vistaAFDPrincipalPanel.setVisible(true);
+        this.vistaAFDCargarDatosPanel.setVisible(false);
+        this.vistaAFDCargarFicheroPanel.setVisible(false);
+        this.vistaAFDMostrarResultadosPanel.setVisible(false);
 
     }
 
@@ -51,27 +62,47 @@ public class ControladorAFD implements ActionListener {
                 cargarPanel(vistaAFDCargarFicheroPanel);
                 break;
             case "Cargar Datos":
-
+                cargarPanel(vistaAFDCargarDatosPanel);
+                break;
+            case "CargarCFP":
+                cargarPanel(vistaAFDComprobarCadenaPanel);
+                break;
+            case "Volver":
+                cargarPanel(vistaAFDPrincipalPanel);
+                break;
+            case "Cargar y Continuar":
+                break;
+            case "FinalizarCDP":
+                cargarPanel(vistaAFDComprobarCadenaPanel);
+                break;
+            case "ComprobarCCP":
+                cargarPanel(vistaAFDMostrarResultadosPanel);
+                break;
+            case "AceptarMRP":
+                cargarPanel(vistaAFDPrincipalPanel);
                 break;
         }
     }
 
-    public void iniciar() {
-        this.vistaAFDFrame.setVisible(true);
-        this.vistaAFDFrame.setLocationRelativeTo(null);
-        this.vistaAFDFrame.setTitle("Vista Principal");
-    }
-
     public void cargarPanel(JPanel panel) {
-        vistaAFDFrame.removeAll();
+        this.vistaAFDPrincipalPanel.setVisible(false);
+        this.vistaAFDCargarDatosPanel.setVisible(false);
+        this.vistaAFDCargarFicheroPanel.setVisible(false);
+        this.vistaAFDMostrarResultadosPanel.setVisible(false);
+        this.vistaAFDComprobarCadenaPanel.setVisible(false);
 
-        panel.setSize(vistaAFDFrame.getSize());
-        panel.setLocation(vistaAFDFrame.getLocation());
         panel.setVisible(true);
     }
 
     public void addActionListener() {
         this.vistaAFDPrincipalPanel.btnCargarDatos.addActionListener(this);
         this.vistaAFDPrincipalPanel.btnCargarFichero.addActionListener(this);
+        this.vistaAFDCargarFicheroPanel.btnCargarFichero.addActionListener(this);
+        this.vistaAFDCargarFicheroPanel.btnVolver.addActionListener(this);
+        this.vistaAFDCargarDatosPanel.btnCargaryContinuar.addActionListener(this);
+        this.vistaAFDCargarDatosPanel.btnVolver.addActionListener(this);
+        this.vistaAFDCargarDatosPanel.btnFinalizar.addActionListener(this);
+        this.vistaAFDComprobarCadenaPanel.btnComprobar.addActionListener(this);
+        this.vistaAFDMostrarResultadosPanel.btnAceptar.addActionListener(this);
     }
 }

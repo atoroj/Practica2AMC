@@ -16,16 +16,14 @@ public class ControladorPrincipal implements ActionListener {
 
     private ControladorAFD controladorAFD;
     private ControladorAFND controladorAFND;
-    
+
     private VistaPrincipalFrame vistaPrincipal;
 
-    public ControladorPrincipal(VistaPrincipalFrame view) {
-        this.vistaPrincipal = view;
-        this.controladorAFD = new ControladorAFD();
+    public ControladorPrincipal() {
+        this.vistaPrincipal = new VistaPrincipalFrame();
+        
         addActionListener();
-    }
-
-    public void iniciar() {
+        
         this.vistaPrincipal.setVisible(true);
         this.vistaPrincipal.setLocationRelativeTo(null);
         this.vistaPrincipal.setTitle("Vista Principal");
@@ -36,7 +34,7 @@ public class ControladorPrincipal implements ActionListener {
 
         switch (e.getActionCommand()) {
             case "AFD":
-                controladorAFD.iniciar();
+                this.controladorAFD = new ControladorAFD();
                 break;
             case "AFND":
 
@@ -46,7 +44,7 @@ public class ControladorPrincipal implements ActionListener {
         }
 
     }
-    
+
     public void addActionListener() {
         this.vistaPrincipal.btnAFD.addActionListener(this);
         this.vistaPrincipal.btnAFND.addActionListener(this);
