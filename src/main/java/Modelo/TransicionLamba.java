@@ -2,7 +2,7 @@ package Modelo;
 
 import Interfaces.ITransicion;
 
-class TransicionLamba implements ITransicion {
+public class TransicionLamba implements ITransicion {
 
     private Estado estadoInicial;
     private Estado estadoFinal;

@@ -6,7 +6,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class AFD implements IAutomataFinitoDeterminista {
@@ -15,8 +14,29 @@ public class AFD implements IAutomataFinitoDeterminista {
     private ArrayList<Estado> estados;
     private ArrayList<TransicionAFD> transiciones;
 
+    public AFD(){
+        estados = new ArrayList<>();
+        transiciones = new ArrayList<>();
+    }
+    
     public AFD(ArrayList<Estado> estados, ArrayList<TransicionAFD> transiciones) {
         this.estados = estados;
+        this.transiciones = transiciones;
+    }
+    
+    public ArrayList<Estado> getEstados() {
+        return estados;
+    }
+
+    public void setEstados(ArrayList<Estado> estados) {
+        this.estados = estados;
+    }
+
+    public ArrayList<TransicionAFD> getTransiciones() {
+        return transiciones;
+    }
+
+    public void setTransiciones(ArrayList<TransicionAFD> transiciones) {
         this.transiciones = transiciones;
     }
 
@@ -76,21 +96,24 @@ public class AFD implements IAutomataFinitoDeterminista {
                 
                 reader.readLine(); //TRANSICIONES:
                 
-                while ((line = reader.readLine()) != "FIN") {                 
+                while ((line = reader.readLine()) != null) {
+                    if (line.contains("FIN")) {
+                        break;
+                    }
                     parts = line.split(" ");
                     if (parts.length == 3) {
                         Estado inicio = null, fin = null;
                         for (int i = 0; i < this.estados.size(); i++) {
-                            if (this.estados.get(i).getNombre().equals(parts[1])) {
+                            if (this.estados.get(i).getNombre().equals(parts[0])) {
                                 inicio = this.estados.get(i);
                             }
                         }
                         for (int i = 0; i < this.estados.size(); i++) {
-                            if (this.estados.get(i).getNombre().equals(parts[3])) {
+                            if (this.estados.get(i).getNombre().equals(parts[2])) {
                                 fin = this.estados.get(i);
                             }
                         }
-                        TransicionAFD trans = new TransicionAFD(inicio, parts[2].charAt(0), fin);
+                        TransicionAFD trans = new TransicionAFD(inicio, parts[1].charAt(1), fin);
                         this.transiciones.add(trans);
                     }
                     
@@ -102,7 +125,7 @@ public class AFD implements IAutomataFinitoDeterminista {
     }
 
     public void crearFichero(String nombre, ArrayList<Estado> estados, Estado inicial, ArrayList<Estado> finales, ArrayList<TransicionAFD> transiciones) {
-        File file = new File("../../resources/" + nombre + ".txt");
+        File file = new File("src\\main\\resources\\" + nombre + ".txt");
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(file.toString()));
             writer.write("TIPO: AFD");
@@ -116,19 +139,17 @@ public class AFD implements IAutomataFinitoDeterminista {
             writer.newLine();
             writer.write("FINALES: ");
             for (int i = 0; i < finales.size(); i++) {
-                writer.write(finales.get(i).getNombre());
+                writer.write(finales.get(i).getNombre() + " ");
             }
             writer.newLine();
             writer.write("TRANSICIONES:");
             writer.newLine();
             for (int i = 0; i < transiciones.size(); i++) {
-                writer.write(transiciones.get(i).getEstadoInicial() + " '" + transiciones.get(i).getSimbolo() + "' " + transiciones.get(i).getEstadoFinal());
+                writer.write(transiciones.get(i).getEstadoInicial().getNombre() + " '" + transiciones.get(i).getSimbolo() + "' " + transiciones.get(i).getEstadoFinal().getNombre());
                 writer.newLine();
             }
             writer.write("FIN");
             writer.flush();
-            //LEE EL NUEVO FICHERO
-            load(file.toString());
         } catch (Exception e) {
             System.out.println("ERROR: " + e.getMessage());
         }

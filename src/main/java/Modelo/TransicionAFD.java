@@ -2,7 +2,7 @@ package Modelo;
 
 import Interfaces.ITransicion;
 
-class TransicionAFD implements ITransicion{
+public class TransicionAFD implements ITransicion{
 
     private Estado estadoInicial;
     private Estado estadoFinal;
@@ -27,6 +27,11 @@ class TransicionAFD implements ITransicion{
     @Override
     public char getSimbolo() {
         return simbolo;
+    }
+
+    @Override
+    public String toString() {
+        return "{" + estadoInicial + " '" + simbolo + "' " + estadoFinal + "} ";
     }
     
 }

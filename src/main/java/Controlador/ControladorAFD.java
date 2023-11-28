@@ -1,26 +1,37 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Controlador;
 
+import Modelo.AFD;
+import Modelo.Estado;
+import Modelo.TransicionAFD;
 import Vista.VistaAFDCargarDatosPanel;
 import Vista.VistaAFDFrame;
 import Vista.VistaAFDPrincipalPanel;
 import Vista.VistaAFDCargarFicheroPanel;
 import Vista.VistaAFDComprobarCadenaPanel;
 import Vista.VistaAFDMostrarResultadosPanel;
-import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Checkbox;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JCheckBox;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 /**
  *
  * @author Usuario
  */
 public class ControladorAFD implements ActionListener {
+
+    private AFD afd;
+
+    private ArrayList<Estado> estados;
+    private Estado inicial;
+    private ArrayList<Estado> finales;
+    private ArrayList<TransicionAFD> transiciones;
 
     private VistaAFDFrame vistaAFDFrame;
     private VistaAFDPrincipalPanel vistaAFDPrincipalPanel;
@@ -30,6 +41,9 @@ public class ControladorAFD implements ActionListener {
     private VistaAFDComprobarCadenaPanel vistaAFDComprobarCadenaPanel;
 
     public ControladorAFD() {
+
+        afd = new AFD();
+
         vistaAFDFrame = new VistaAFDFrame();
         vistaAFDPrincipalPanel = new VistaAFDPrincipalPanel();
         vistaAFDCargarFicheroPanel = new VistaAFDCargarFicheroPanel();
@@ -62,17 +76,46 @@ public class ControladorAFD implements ActionListener {
                 cargarPanel(vistaAFDCargarFicheroPanel);
                 break;
             case "Cargar Datos":
+                inicializarParametros();
                 cargarPanel(vistaAFDCargarDatosPanel);
                 break;
-            case "CargarCFP":
+            case "CargarCFP": {
+                try {
+                    afd.load("src\\main\\resources\\" + vistaAFDCargarFicheroPanel.txtNombreFichero.getText());
+                    System.out.println("Estados: " + afd.getEstados());
+                    System.out.println("Transiciones: " + afd.getTransiciones());
+                } catch (Exception ex) {
+                    ex.getMessage();
+                }
                 cargarPanel(vistaAFDComprobarCadenaPanel);
-                break;
+            }
+            break;
+
             case "Volver":
+                vistaAFDCargarDatosPanel.chbxNodoInicial.setVisible(true);
                 cargarPanel(vistaAFDPrincipalPanel);
                 break;
             case "Cargar y Continuar":
+                introducirTransiciones(vistaAFDCargarDatosPanel.jTextField1,
+                        vistaAFDCargarDatosPanel.jTextField2,
+                        vistaAFDCargarDatosPanel.jTextField3,
+                        vistaAFDCargarDatosPanel.chbxNodoInicial,
+                        vistaAFDCargarDatosPanel.chbxNodoFinal);
                 break;
             case "FinalizarCDP":
+                introducirTransiciones(vistaAFDCargarDatosPanel.jTextField1,
+                        vistaAFDCargarDatosPanel.jTextField2,
+                        vistaAFDCargarDatosPanel.jTextField3,
+                        vistaAFDCargarDatosPanel.chbxNodoInicial,
+                        vistaAFDCargarDatosPanel.chbxNodoFinal);
+
+                System.out.println("Estados " + estados);
+                System.out.println("Inicial " + inicial);
+                System.out.println("Finales " + finales);
+                System.out.println("transiciones " + transiciones);
+
+                vistaAFDCargarDatosPanel.chbxNodoInicial.setVisible(true);
+                afd.crearFichero("prueba", estados, inicial, finales, transiciones);
                 cargarPanel(vistaAFDComprobarCadenaPanel);
                 break;
             case "ComprobarCCP":
@@ -82,6 +125,53 @@ public class ControladorAFD implements ActionListener {
                 cargarPanel(vistaAFDPrincipalPanel);
                 break;
         }
+
+    }
+
+    public void inicializarParametros() {
+        estados = new ArrayList<>();
+        inicial = new Estado();
+        finales = new ArrayList<>();
+        transiciones = new ArrayList<>();
+    }
+
+    //TO DO: COMPROBAR QUE NO SE PUEDA FINALIZAR EL PROCESO SIN EXISTIR UN NODO INICIAL Y UN NODO FINAL
+    public void introducirTransiciones(JTextField e1, JTextField simbolo, JTextField e2, JCheckBox chbxInicial, JCheckBox chbxFinal) {
+
+        boolean existeE1 = false, existeE2 = false;
+
+        if (!estados.isEmpty()) {
+            for (Estado estado : estados) {
+                if (estado.getNombre().equals(e1.getText())) {
+                    existeE1 = true;
+                }
+                if (estado.getNombre().equals(e2.getText())) {
+                    existeE2 = true;
+                }
+            }
+        }
+
+        if (!existeE1) {
+            estados.add(new Estado(e1.getText()));
+        }
+        if (!existeE2 && !e1.getText().equals(e2.getText())) {
+            estados.add(new Estado(e2.getText()));
+        }
+
+        if (chbxInicial.isSelected()) {
+            inicial = new Estado(e1.getText());
+            chbxInicial.setVisible(false);
+            chbxInicial.setSelected(false);
+        }
+        if (chbxFinal.isSelected()) {
+            finales.add(new Estado(e2.getText()));
+            chbxFinal.setSelected(false);
+        }
+        transiciones.add(new TransicionAFD(new Estado(e1.getText()), simbolo.getText().charAt(0), new Estado(e2.getText())));
+
+        e1.setText("");
+        e2.setText("");
+        simbolo.setText("");
     }
 
     public void cargarPanel(JPanel panel) {

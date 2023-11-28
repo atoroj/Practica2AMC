@@ -2,7 +2,7 @@ package Modelo;
 
 import Interfaces.ITransicion;
 
-class TransicionAFND implements ITransicion {
+public class TransicionAFND implements ITransicion {
 
     private Estado estadoInicial;
     private Estado estadoFinal;

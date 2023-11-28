@@ -22,6 +22,9 @@ public class Estado {
     public Estado(String nombre){
         this.nombre = nombre;
     }
+    public Estado(){
+        
+    }
     /**
      * @return the nombre
      */
@@ -62,6 +65,11 @@ public class Estado {
      */
     public void setNodoFinal(boolean nodoFinal) {
         this.nodoFinal = nodoFinal;
+    }
+
+    @Override
+    public String toString() {
+        return nombre + " ";
     }
 
 }
