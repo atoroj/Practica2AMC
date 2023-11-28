@@ -1,5 +1,8 @@
 package Interfaces;
 
+import Modelo.Estado;
+import java.util.ArrayList;
+
 public interface IAutomataFinitoDeterminista extends IProceso {
 
     /**

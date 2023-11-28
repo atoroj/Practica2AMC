@@ -19,7 +19,9 @@ public class Estado {
         this.inicial = esInicial;
         this.nodoFinal = esFinal;
     }
-
+    public Estado(String nombre){
+        this.nombre = nombre;
+    }
     /**
      * @return the nombre
      */
