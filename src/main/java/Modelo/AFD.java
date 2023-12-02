@@ -13,16 +13,16 @@ public class AFD implements IAutomataFinitoDeterminista {
     private ArrayList<Estado> estados;
     private ArrayList<TransicionAFD> transiciones;
 
-    public AFD(){
+    public AFD() {
         estados = new ArrayList<>();
         transiciones = new ArrayList<>();
     }
-    
+
     public AFD(ArrayList<Estado> estados, ArrayList<TransicionAFD> transiciones) {
         this.estados = estados;
         this.transiciones = transiciones;
     }
-    
+
     public ArrayList<Estado> getEstados() {
         return estados;
     }
@@ -44,24 +44,20 @@ public class AFD implements IAutomataFinitoDeterminista {
     }
 
     public Estado transicion(Estado estado, char simbolo) {
-        
+
         Estado estadoResult = null;
-        
-        for(TransicionAFD transicion: transiciones){
-            System.out.println("transicion.getEstadoInicial().getNombre() " + transicion.getEstadoInicial().getNombre() + "estado.getNombre() " + estado.getNombre());
-            System.out.println("transicion.getSimbolo() " + transicion.getSimbolo() + "simbolo" + simbolo);
-            if (transicion.getEstadoInicial().getNombre().equals(estado.getNombre()) &&
-                    transicion.getSimbolo() == simbolo) {
-                System.out.println("ENTRA");
+
+        for (TransicionAFD transicion : transiciones) {
+            if (transicion.getEstadoInicial().getNombre().equals(estado.getNombre())
+                    && transicion.getSimbolo() == simbolo) {
                 estadoResult = transicion.getEstadoFinal();
                 break;
             }
         }
-        
+
         if (estadoResult == null) {
             estadoResult = new Estado("M");
         }
-        System.out.println("estadoResult " + estadoResult + "esNodoFInal " + estadoResult.isNodoFinal());
         return estadoResult;
     }
 
@@ -93,6 +89,8 @@ public class AFD implements IAutomataFinitoDeterminista {
         File fichero = new File(filePath);
         if (fichero.exists()) {
             try {
+                this.estados.clear();
+                this.transiciones.clear();
                 BufferedReader reader = new BufferedReader(new FileReader(fichero));
                 String line;
                 reader.readLine(); //TIPO:
@@ -119,9 +117,9 @@ public class AFD implements IAutomataFinitoDeterminista {
                         }
                     }
                 }
-                
+
                 reader.readLine(); //TRANSICIONES:
-                
+
                 while ((line = reader.readLine()) != null) {
                     if (line.contains("FIN")) {
                         break;
@@ -143,7 +141,7 @@ public class AFD implements IAutomataFinitoDeterminista {
                         this.transiciones.add(trans);
                     }
                 }
-                
+
             } catch (Exception e) {
                 System.out.println("ERROR:" + e.getMessage());
             }

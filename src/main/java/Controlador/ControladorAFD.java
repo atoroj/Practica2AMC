@@ -9,6 +9,7 @@ import Vista.VistaAFDPrincipalPanel;
 import Vista.VistaAFDCargarFicheroPanel;
 import Vista.VistaAFDComprobarCadenaPanel;
 import Vista.VistaAFDMostrarResultadosPanel;
+import Vista.VistaDialog;
 import java.awt.CardLayout;
 import java.awt.Checkbox;
 import java.awt.event.ActionEvent;
@@ -175,6 +176,17 @@ public class ControladorAFD implements ActionListener {
     public void introducirTransiciones(JTextField e1, JTextField simbolo, JTextField e2, JCheckBox chbxInicial, JCheckBox chbxFinal) {
 
         boolean existeE1 = false, existeE2 = false;
+
+        for (TransicionAFD transicion : transiciones) {
+            if (transicion.getEstadoInicial().getNombre().equals(e1.getText()) && transicion.getSimbolo() == simbolo.getText().charAt(0)) {
+                e1.setText("");
+                e2.setText("");
+                simbolo.setText("");
+                VistaDialog vistaDialog = new VistaDialog();
+                vistaDialog.mensaje("Ya existe una transicion con ese estado inicial y simbolo, por favor introduce otra transición");
+                return;
+            }
+        }
 
         if (!estados.isEmpty()) {
             for (Estado estado : estados) {
