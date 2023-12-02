@@ -62,6 +62,7 @@ public class ControladorAFD implements ActionListener {
         this.vistaAFDFrame.add(vistaAFDMostrarResultadosPanel);
         this.vistaAFDFrame.add(vistaAFDComprobarCadenaPanel);
         this.vistaAFDFrame.setLocationRelativeTo(null);
+        this.vistaAFDFrame.setTitle("Vista AFD Principal");
 
         this.vistaAFDPrincipalPanel.setVisible(true);
         this.vistaAFDCargarDatosPanel.setVisible(false);
@@ -74,10 +75,12 @@ public class ControladorAFD implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
             case "Cargar Fichero Txt":
+                this.vistaAFDFrame.setTitle("Cargar Fichero");
                 cargarPanel(vistaAFDCargarFicheroPanel);
                 break;
             case "Cargar Datos":
                 inicializarParametros();
+                this.vistaAFDFrame.setTitle("Cargar Datos");
                 cargarPanel(vistaAFDCargarDatosPanel);
                 break;
             case "CargarCFP": {
@@ -88,12 +91,15 @@ public class ControladorAFD implements ActionListener {
                 } catch (Exception ex) {
                     ex.getMessage();
                 }
+
+                this.vistaAFDFrame.setTitle("Comprobar Cadena");
                 cargarPanel(vistaAFDComprobarCadenaPanel);
             }
             break;
 
             case "Volver":
                 vistaAFDCargarDatosPanel.chbxNodoInicial.setVisible(true);
+                this.vistaAFDFrame.setTitle("Vista AFD Principal");
                 cargarPanel(vistaAFDPrincipalPanel);
                 break;
             case "Cargar y Continuar":
@@ -123,6 +129,7 @@ public class ControladorAFD implements ActionListener {
                     Logger.getLogger(ControladorAFD.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
+                this.vistaAFDFrame.setTitle("Comprobar Cadena");
                 cargarPanel(vistaAFDComprobarCadenaPanel);
             }
             break;
@@ -156,9 +163,11 @@ public class ControladorAFD implements ActionListener {
                 } else {
                     vistaAFDMostrarResultadosPanel.lblResultadoValor.setText("NO EXISTE");
                 }
+                this.vistaAFDFrame.setTitle("Mostrar Resultados");
                 cargarPanel(vistaAFDMostrarResultadosPanel);
                 break;
             case "AceptarMRP":
+                this.vistaAFDFrame.setTitle("Vista AFD Principal");
                 cargarPanel(vistaAFDPrincipalPanel);
                 break;
         }
