@@ -102,7 +102,7 @@ public class ControladorAFD implements ActionListener {
                         vistaAFDCargarDatosPanel.chbxNodoInicial,
                         vistaAFDCargarDatosPanel.chbxNodoFinal);
                 break;
-            case "FinalizarCDP":
+            case "FinalizarCDP": {
                 introducirTransiciones(vistaAFDCargarDatosPanel.jTextField1,
                         vistaAFDCargarDatosPanel.jTextField2,
                         vistaAFDCargarDatosPanel.jTextField3,
@@ -115,10 +115,46 @@ public class ControladorAFD implements ActionListener {
                 System.out.println("transiciones " + transiciones);
 
                 vistaAFDCargarDatosPanel.chbxNodoInicial.setVisible(true);
-                afd.crearFichero("prueba", estados, inicial, finales, transiciones);
+
+                try {
+                    afd.load(afd.crearFichero("prueba", estados, inicial, finales, transiciones));
+                } catch (Exception ex) {
+                    Logger.getLogger(ControladorAFD.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
                 cargarPanel(vistaAFDComprobarCadenaPanel);
-                break;
+            }
+            break;
+
             case "ComprobarCCP":
+                String cadenaEstados = "",
+                 cadenaInicial = "",
+                 cadenaFinal = "",
+                 cadenaTransiciones = "";
+                vistaAFDMostrarResultadosPanel.lblTipoValor.setText("AFD");
+                for (Estado estado : afd.getEstados()) {
+                    cadenaEstados += estado.getNombre() + " ";
+                    if (estado.isNodoInicial()) {
+                        cadenaInicial = estado.getNombre();
+                    }
+                    if (estado.isNodoFinal()) {
+                        cadenaFinal += estado.getNombre() + " ";
+                    }
+                }
+                for (TransicionAFD transicion : afd.getTransiciones()) {
+                    cadenaTransiciones += transicion + "\n";
+                }
+                vistaAFDMostrarResultadosPanel.lblEstadosValor.setText(cadenaEstados);
+                vistaAFDMostrarResultadosPanel.lblInicialValor.setText(cadenaInicial);
+                vistaAFDMostrarResultadosPanel.lblFinalesValor.setText(cadenaFinal);
+                vistaAFDMostrarResultadosPanel.txtATransiciones.setText(cadenaTransiciones);
+                vistaAFDMostrarResultadosPanel.txtATransiciones.setEditable(false);
+
+                if (afd.reconocer(vistaAFDComprobarCadenaPanel.txtComprobarCadena.getText())) {
+                    vistaAFDMostrarResultadosPanel.lblResultadoValor.setText("EXISTE");
+                } else {
+                    vistaAFDMostrarResultadosPanel.lblResultadoValor.setText("NO EXISTE");
+                }
                 cargarPanel(vistaAFDMostrarResultadosPanel);
                 break;
             case "AceptarMRP":

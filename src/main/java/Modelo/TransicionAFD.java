@@ -31,7 +31,7 @@ public class TransicionAFD implements ITransicion{
 
     @Override
     public String toString() {
-        return "{" + estadoInicial + " '" + simbolo + "' " + estadoFinal + "} ";
+        return estadoInicial + " '" + simbolo + "' " + estadoFinal;
     }
     
 }

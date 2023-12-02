@@ -11,12 +11,12 @@ package Modelo;
 public class Estado {
 
     private String nombre;
-    private boolean inicial;
+    private boolean nodoInicial;
     private boolean nodoFinal;
     
     public Estado(String nombre, boolean esInicial, boolean esFinal){
         this.nombre = nombre;
-        this.inicial = esInicial;
+        this.nodoInicial = esInicial;
         this.nodoFinal = esFinal;
     }
     public Estado(String nombre){
@@ -40,17 +40,17 @@ public class Estado {
     }
 
     /**
-     * @return the inicial
+     * @return the nodoInicial
      */
-    public boolean isInicial() {
-        return inicial;
+    public boolean isNodoInicial() {
+        return nodoInicial;
     }
 
     /**
-     * @param esInicial the inicial to set
+     * @param esInicial the nodoInicial to set
      */
-    public void setInicial(boolean esInicial) {
-        this.inicial = esInicial;
+    public void setNodoInicial(boolean esInicial) {
+        this.nodoInicial = esInicial;
     }
 
     /**

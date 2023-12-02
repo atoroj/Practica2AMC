@@ -36,14 +36,18 @@ public class VistaAFDMostrarResultadosPanel extends javax.swing.JPanel {
         lblResultado = new javax.swing.JLabel();
         lblResultadoValor = new javax.swing.JLabel();
         btnAceptar = new javax.swing.JButton();
+        lblTipoValor = new javax.swing.JLabel();
+        lblEstadosValor = new javax.swing.JLabel();
+        lblInicialValor = new javax.swing.JLabel();
+        lblFinalesValor = new javax.swing.JLabel();
 
         lblTipo.setText("TIPO:");
 
         lblEstados.setText("ESTADOS:");
 
-        lblInicial.setText("INICIAL");
+        lblInicial.setText("INICIAL:");
 
-        lblFinales.setText("FINALES");
+        lblFinales.setText("FINALES:");
 
         lblTransiciones.setText("TRANSICIONES");
 
@@ -56,6 +60,14 @@ public class VistaAFDMostrarResultadosPanel extends javax.swing.JPanel {
         btnAceptar.setText("Aceptar");
         btnAceptar.setActionCommand("AceptarMRP");
 
+        lblTipoValor.setText("jLabel1");
+
+        lblEstadosValor.setText("jLabel2");
+
+        lblInicialValor.setText("jLabel3");
+
+        lblFinalesValor.setText("jLabel4");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -65,40 +77,58 @@ public class VistaAFDMostrarResultadosPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(lblEstados)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 197, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblEstadosValor)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lblResultado)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblResultadoValor)
                         .addGap(63, 63, 63))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblTipo)
-                            .addComponent(lblInicial)
-                            .addComponent(lblFinales)
-                            .addComponent(lblTransiciones))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnAceptar)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 119, Short.MAX_VALUE)
+                        .addComponent(btnAceptar))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblTipo)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblTipoValor))
+                            .addComponent(lblTransiciones)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblInicial)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblInicialValor))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblFinales)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblFinalesValor)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lblTipo)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblTipo)
+                    .addComponent(lblTipoValor))
                 .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblEstados)
                     .addComponent(lblResultado)
-                    .addComponent(lblResultadoValor))
+                    .addComponent(lblResultadoValor)
+                    .addComponent(lblEstadosValor))
                 .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblInicial)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblInicial)
+                            .addComponent(lblInicialValor))
                         .addGap(28, 28, 28)
-                        .addComponent(lblFinales)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblFinales)
+                            .addComponent(lblFinalesValor))
                         .addGap(28, 28, 28)
                         .addComponent(lblTransiciones)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -113,12 +143,16 @@ public class VistaAFDMostrarResultadosPanel extends javax.swing.JPanel {
     public javax.swing.JButton btnAceptar;
     public javax.swing.JScrollPane jScrollPane1;
     public javax.swing.JLabel lblEstados;
+    public javax.swing.JLabel lblEstadosValor;
     public javax.swing.JLabel lblFinales;
+    public javax.swing.JLabel lblFinalesValor;
     public javax.swing.JLabel lblInicial;
+    public javax.swing.JLabel lblInicialValor;
     public javax.swing.JLabel lblResultado;
-    private javax.swing.JLabel lblResultadoValor;
+    public javax.swing.JLabel lblResultadoValor;
     public javax.swing.JLabel lblTipo;
+    public javax.swing.JLabel lblTipoValor;
     public javax.swing.JLabel lblTransiciones;
-    private javax.swing.JTextArea txtATransiciones;
+    public javax.swing.JTextArea txtATransiciones;
     // End of variables declaration//GEN-END:variables
 }

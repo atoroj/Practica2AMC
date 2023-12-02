@@ -10,7 +10,6 @@ import java.util.ArrayList;
 
 public class AFD implements IAutomataFinitoDeterminista {
 
-    private String tipo = "AFD";
     private ArrayList<Estado> estados;
     private ArrayList<TransicionAFD> transiciones;
 
@@ -45,15 +44,42 @@ public class AFD implements IAutomataFinitoDeterminista {
     }
 
     public Estado transicion(Estado estado, char simbolo) {
-        return null;
+        
+        Estado estadoResult = null;
+        
+        for(TransicionAFD transicion: transiciones){
+            System.out.println("transicion.getEstadoInicial().getNombre() " + transicion.getEstadoInicial().getNombre() + "estado.getNombre() " + estado.getNombre());
+            System.out.println("transicion.getSimbolo() " + transicion.getSimbolo() + "simbolo" + simbolo);
+            if (transicion.getEstadoInicial().getNombre().equals(estado.getNombre()) &&
+                    transicion.getSimbolo() == simbolo) {
+                System.out.println("ENTRA");
+                estadoResult = transicion.getEstadoFinal();
+                break;
+            }
+        }
+        
+        if (estadoResult == null) {
+            estadoResult = new Estado("M");
+        }
+        System.out.println("estadoResult " + estadoResult + "esNodoFInal " + estadoResult.isNodoFinal());
+        return estadoResult;
     }
 
     @Override
     public boolean reconocer(String cadena) {
         char[] simbolo = cadena.toCharArray();
         Estado estado = null;
+        for (int i = 0; i < estados.size(); i++) {
+            if (estados.get(i).isNodoInicial()) {
+                estado = estados.get(i);
+                break;
+            }
+        }
         for (int i = 0; i < simbolo.length; i++) {
             estado = transicion(estado, simbolo[i]);
+            if (estado.getNombre().equals("M")) {
+                break;
+            }
         }
         return esFinal(estado);
     }
@@ -79,7 +105,7 @@ public class AFD implements IAutomataFinitoDeterminista {
                 parts = line.split(" ");
                 for (int i = 0; i < this.estados.size(); i++) {
                     if (this.estados.get(i).getNombre().equals(parts[1])) {
-                        this.estados.get(i).setInicial(true);
+                        this.estados.get(i).setNodoInicial(true);
                         break;
                     }
                 }
@@ -116,15 +142,15 @@ public class AFD implements IAutomataFinitoDeterminista {
                         TransicionAFD trans = new TransicionAFD(inicio, parts[1].charAt(1), fin);
                         this.transiciones.add(trans);
                     }
-                    
                 }
+                
             } catch (Exception e) {
                 System.out.println("ERROR:" + e.getMessage());
             }
         }
     }
 
-    public void crearFichero(String nombre, ArrayList<Estado> estados, Estado inicial, ArrayList<Estado> finales, ArrayList<TransicionAFD> transiciones) {
+    public String crearFichero(String nombre, ArrayList<Estado> estados, Estado inicial, ArrayList<Estado> finales, ArrayList<TransicionAFD> transiciones) {
         File file = new File("src\\main\\resources\\" + nombre + ".txt");
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(file.toString()));
@@ -153,11 +179,12 @@ public class AFD implements IAutomataFinitoDeterminista {
         } catch (Exception e) {
             System.out.println("ERROR: " + e.getMessage());
         }
+        return file.toString();
     }
 
     @Override
     public boolean esFinal(Estado estado) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return estado.isNodoFinal();
     }
 
 }
