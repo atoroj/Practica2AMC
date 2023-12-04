@@ -8,12 +8,12 @@ package Vista;
  *
  * @author Usuario
  */
-public class VistaAFDPrincipalPanel extends javax.swing.JPanel {
+public class VistaPrincipalPanel extends javax.swing.JPanel {
 
     /**
      * Creates new form VistaAFDPrincipalPanel
      */
-    public VistaAFDPrincipalPanel() {
+    public VistaPrincipalPanel() {
         initComponents();
     }
 

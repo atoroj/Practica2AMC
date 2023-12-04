@@ -8,12 +8,12 @@ package Vista;
  *
  * @author Usuario
  */
-public class VistaAFDCargarDatosPanel extends javax.swing.JPanel {
+public class VistaCargarDatosPanel extends javax.swing.JPanel {
 
     /**
      * Creates new form VistaAFDCargarDatosPanel
      */
-    public VistaAFDCargarDatosPanel() {
+    public VistaCargarDatosPanel() {
         initComponents();
     }
 

@@ -8,12 +8,12 @@ package Vista;
  *
  * @author Carlos
  */
-public class VistaAFDComprobarCadenaPanel extends javax.swing.JPanel {
+public class VistaComprobarCadenaPanel extends javax.swing.JPanel {
 
     /**
      * Creates new form VistaAFDComprobarCadena
      */
-    public VistaAFDComprobarCadenaPanel() {
+    public VistaComprobarCadenaPanel() {
         initComponents();
     }
 

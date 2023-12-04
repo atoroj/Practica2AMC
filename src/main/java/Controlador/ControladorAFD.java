@@ -3,11 +3,11 @@ package Controlador;
 import Modelo.AFD;
 import Modelo.Estado;
 import Modelo.TransicionAFD;
-import Vista.VistaAFDCargarDatosPanel;
+import Vista.VistaCargarDatosPanel;
 import Vista.VistaAFDFrame;
-import Vista.VistaAFDPrincipalPanel;
-import Vista.VistaAFDCargarFicheroPanel;
-import Vista.VistaAFDComprobarCadenaPanel;
+import Vista.VistaPrincipalPanel;
+import Vista.VistaCargarFicheroPanel;
+import Vista.VistaComprobarCadenaPanel;
 import Vista.VistaAFDMostrarResultadosPanel;
 import Vista.VistaDialog;
 import java.awt.CardLayout;
@@ -35,22 +35,22 @@ public class ControladorAFD implements ActionListener {
     private ArrayList<TransicionAFD> transiciones;
 
     private VistaAFDFrame vistaAFDFrame;
-    private VistaAFDPrincipalPanel vistaAFDPrincipalPanel;
-    private VistaAFDCargarFicheroPanel vistaAFDCargarFicheroPanel;
-    private VistaAFDCargarDatosPanel vistaAFDCargarDatosPanel;
+    private VistaPrincipalPanel vistaAFDPrincipalPanel;
+    private VistaCargarFicheroPanel vistaAFDCargarFicheroPanel;
+    private VistaCargarDatosPanel vistaAFDCargarDatosPanel;
     private VistaAFDMostrarResultadosPanel vistaAFDMostrarResultadosPanel;
-    private VistaAFDComprobarCadenaPanel vistaAFDComprobarCadenaPanel;
+    private VistaComprobarCadenaPanel vistaAFDComprobarCadenaPanel;
 
     public ControladorAFD() {
 
         afd = new AFD();
 
         vistaAFDFrame = new VistaAFDFrame();
-        vistaAFDPrincipalPanel = new VistaAFDPrincipalPanel();
-        vistaAFDCargarFicheroPanel = new VistaAFDCargarFicheroPanel();
+        vistaAFDPrincipalPanel = new VistaPrincipalPanel();
+        vistaAFDCargarFicheroPanel = new VistaCargarFicheroPanel();
         vistaAFDMostrarResultadosPanel = new VistaAFDMostrarResultadosPanel();
-        vistaAFDCargarDatosPanel = new VistaAFDCargarDatosPanel();
-        vistaAFDComprobarCadenaPanel = new VistaAFDComprobarCadenaPanel();
+        vistaAFDCargarDatosPanel = new VistaCargarDatosPanel();
+        vistaAFDComprobarCadenaPanel = new VistaComprobarCadenaPanel();
 
         addActionListener();
 
