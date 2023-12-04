@@ -1,8 +1,8 @@
 package Modelo;
 
-import Interfaces.ITransicion;
+import Interfaces.ITransicionAFD;
 
-public class TransicionAFD implements ITransicion{
+public class TransicionAFD implements ITransicionAFD{
 
     private Estado estadoInicial;
     private Estado estadoFinal;

@@ -1,6 +1,7 @@
 package Interfaces;
 
 import Modelo.Estado;
+import Modelo.TransicionAFD;
 import java.util.ArrayList;
 
 public interface IAutomataFinitoDeterminista extends IProceso {
@@ -15,4 +16,6 @@ public interface IAutomataFinitoDeterminista extends IProceso {
      * @throws java.lang.Exception
      */
     void load(String filePath) throws Exception;
+    
+    String write(String nombre, ArrayList<Estado> estados, Estado inicial, ArrayList<Estado> finales, ArrayList<TransicionAFD> transiciones);
 }

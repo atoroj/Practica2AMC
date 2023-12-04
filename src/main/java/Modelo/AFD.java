@@ -148,7 +148,8 @@ public class AFD implements IAutomataFinitoDeterminista {
         }
     }
 
-    public String crearFichero(String nombre, ArrayList<Estado> estados, Estado inicial, ArrayList<Estado> finales, ArrayList<TransicionAFD> transiciones) {
+    @Override
+    public String write(String nombre, ArrayList<Estado> estados, Estado inicial, ArrayList<Estado> finales, ArrayList<TransicionAFD> transiciones) {
         File file = new File("src\\main\\resources\\" + nombre + ".txt");
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(file.toString()));

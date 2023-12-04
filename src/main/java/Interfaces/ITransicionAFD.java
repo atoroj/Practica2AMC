@@ -2,7 +2,7 @@ package Interfaces;
 
 import Modelo.Estado;
 
-public interface ITransicion {
+public interface ITransicionAFD {
 
     Estado getEstadoInicial();
 

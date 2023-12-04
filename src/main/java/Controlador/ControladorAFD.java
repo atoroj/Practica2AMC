@@ -124,7 +124,7 @@ public class ControladorAFD implements ActionListener {
                 vistaAFDCargarDatosPanel.chbxNodoInicial.setVisible(true);
 
                 try {
-                    afd.load(afd.crearFichero("prueba", estados, inicial, finales, transiciones));
+                    afd.load(afd.write("prueba", estados, inicial, finales, transiciones));
                 } catch (Exception ex) {
                     Logger.getLogger(ControladorAFD.class.getName()).log(Level.SEVERE, null, ex);
                 }
