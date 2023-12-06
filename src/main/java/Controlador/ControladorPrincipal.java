@@ -37,7 +37,7 @@ public class ControladorPrincipal implements ActionListener {
                 this.controladorAFD = new ControladorAFD();
                 break;
             case "AFND":
-
+                this.controladorAFND = new ControladorAFND();
                 break;
             default:
                 throw new AssertionError();

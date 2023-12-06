@@ -1,8 +1,11 @@
 package Controlador;
 
 import Modelo.AFD;
+import Modelo.AFND;
 import Modelo.Estado;
 import Modelo.TransicionAFD;
+import Modelo.TransicionAFND;
+import Modelo.TransicionLambda;
 import Vista.VistaCargarDatosPanel;
 import Vista.VistaAFDFrame;
 import Vista.VistaPrincipalPanel;
@@ -26,13 +29,14 @@ import javax.swing.JTextField;
  */
 public class ControladorAFND implements ActionListener {
 
-    private AFD afd;
+    private AFND afnd;
 
     private ArrayList<Estado> estados;
     private Estado inicial;
     private ArrayList<Estado> finales;
-    private ArrayList<TransicionAFD> transiciones;
-
+    private ArrayList<TransicionAFND> transiciones;
+    private ArrayList<TransicionLambda> transicionesLambda;
+    
     private VistaAFDFrame vistaAFNDFrame;
     private VistaPrincipalPanel vistaAFNDPrincipalPanel;
     private VistaCargarFicheroPanel vistaAFNDCargarFicheroPanel;
@@ -42,7 +46,7 @@ public class ControladorAFND implements ActionListener {
 
     public ControladorAFND() {
 
-        afd = new AFD();
+        afnd = new AFND();
 
         vistaAFNDFrame = new VistaAFDFrame();
         vistaAFNDPrincipalPanel = new VistaPrincipalPanel();
@@ -84,9 +88,10 @@ public class ControladorAFND implements ActionListener {
                 break;
             case "CargarCFP": {
                 try {
-                    afd.load("src\\main\\resources\\" + vistaAFNDCargarFicheroPanel.txtNombreFichero.getText());
-                    System.out.println("Estados: " + afd.getEstados());
-                    System.out.println("Transiciones: " + afd.getTransiciones());
+                    afnd.load("src\\main\\resources\\" + vistaAFNDCargarFicheroPanel.txtNombreFichero.getText());
+                    System.out.println("Estados: " + afnd.getEstados());
+                    System.out.println("Transiciones: " + afnd.getTransiciones());
+                    System.out.println("Transiciones Lambda: "+afnd.getTransicionesLamba());
                 } catch (Exception ex) {
                     ex.getMessage();
                 }
@@ -123,7 +128,7 @@ public class ControladorAFND implements ActionListener {
                 vistaAFNDCargarDatosPanel.chbxNodoInicial.setVisible(true);
 
                 try {
-                    afd.load(afd.write("prueba", estados, inicial, finales, transiciones));
+                   // afnd.load(afnd.write("prueba", estados, inicial, finales, transiciones));
                 } catch (Exception ex) {
                     Logger.getLogger(ControladorAFD.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -139,7 +144,7 @@ public class ControladorAFND implements ActionListener {
                  cadenaFinal = "",
                  cadenaTransiciones = "";
                 vistaAFNDMostrarResultadosPanel.lblTipoValor.setText("AFD");
-                for (Estado estado : afd.getEstados()) {
+                for (Estado estado : afnd.getEstados()) {
                     cadenaEstados += estado.getNombre() + " ";
                     if (estado.isNodoInicial()) {
                         cadenaInicial = estado.getNombre();
@@ -148,7 +153,7 @@ public class ControladorAFND implements ActionListener {
                         cadenaFinal += estado.getNombre() + " ";
                     }
                 }
-                for (TransicionAFD transicion : afd.getTransiciones()) {
+                for (TransicionAFND transicion : afnd.getTransiciones()) {
                     cadenaTransiciones += transicion + "\n";
                 }
                 vistaAFNDMostrarResultadosPanel.lblEstadosValor.setText(cadenaEstados);
@@ -157,7 +162,7 @@ public class ControladorAFND implements ActionListener {
                 vistaAFNDMostrarResultadosPanel.txtATransiciones.setText(cadenaTransiciones);
                 vistaAFNDMostrarResultadosPanel.txtATransiciones.setEditable(false);
 
-                if (afd.reconocer(vistaAFNDComprobarCadenaPanel.txtComprobarCadena.getText())) {
+                if (afnd.reconocer(vistaAFNDComprobarCadenaPanel.txtComprobarCadena.getText())) {
                     vistaAFNDMostrarResultadosPanel.lblResultadoValor.setText("EXISTE");
                 } else {
                     vistaAFNDMostrarResultadosPanel.lblResultadoValor.setText("NO EXISTE");
@@ -185,7 +190,7 @@ public class ControladorAFND implements ActionListener {
 
         boolean existeE1 = false, existeE2 = false;
 
-        for (TransicionAFD transicion : transiciones) {
+        for (TransicionAFND transicion : transiciones) {
             if (transicion.getEstadoInicial().getNombre().equals(e1.getText()) && transicion.getSimbolo() == simbolo.getText().charAt(0)) {
                 e1.setText("");
                 e2.setText("");
@@ -223,7 +228,7 @@ public class ControladorAFND implements ActionListener {
             finales.add(new Estado(e2.getText()));
             chbxFinal.setSelected(false);
         }
-        transiciones.add(new TransicionAFD(new Estado(e1.getText()), simbolo.getText().charAt(0), new Estado(e2.getText())));
+//        transiciones.add(new TransicionAFD(new Estado(e1.getText()), simbolo.getText().charAt(0), new Estado(e2.getText())));
 
         e1.setText("");
         e2.setText("");

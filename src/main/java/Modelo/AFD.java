@@ -39,10 +39,6 @@ public class AFD implements IAutomataFinitoDeterminista {
         this.transiciones = transiciones;
     }
 
-    public void agregarTransicion(Estado e1, char simbolo, Estado e2) {
-
-    }
-
     public Estado transicion(Estado estado, char simbolo) {
 
         Estado estadoResult = null;

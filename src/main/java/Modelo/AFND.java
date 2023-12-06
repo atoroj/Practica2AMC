@@ -9,25 +9,47 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 
 public class AFND implements IAutomataFinitoNoDeterminista {
-
     private ArrayList<Estado> estados;
     private ArrayList<TransicionAFND> transiciones;
     private ArrayList<TransicionLambda> transicionesLamba;
-
+    
+    public AFND(){
+        this.estados = new ArrayList<>();
+        this.transiciones = new ArrayList<>();
+        this.transicionesLamba = new ArrayList<>();
+    }
+    
     public AFND(ArrayList<Estado> estados, ArrayList<TransicionAFND> transiciones, ArrayList<TransicionLambda> transicionesLamba) {
         this.estados = estados;
         this.transiciones = transiciones;
         this.transicionesLamba = transicionesLamba;
     }
-
-    public void agregarTransicion(Estado e1, char simbolo, Estado[] e2) {
-
+    
+    
+    public ArrayList<Estado> getEstados() {
+        return estados;
     }
 
-    public void agregarTransicionLamda(Estado e1, Estado[] e2) {
-
+    public void setEstados(ArrayList<Estado> estados) {
+        this.estados = estados;
     }
 
+    public ArrayList<TransicionAFND> getTransiciones() {
+        return transiciones;
+    }
+
+    public void setTransiciones(ArrayList<TransicionAFND> transiciones) {
+        this.transiciones = transiciones;
+    }
+
+    public ArrayList<TransicionLambda> getTransicionesLamba() {
+        return transicionesLamba;
+    }
+
+    public void setTransicionesLamba(ArrayList<TransicionLambda> transicionesLamba) {
+        this.transicionesLamba = transicionesLamba;
+    }
+    
     private ArrayList<Estado> transicion(Estado estado, char simbolo) {
         return null;
     }
@@ -70,6 +92,7 @@ public class AFND implements IAutomataFinitoNoDeterminista {
             try {
                 this.estados.clear();
                 this.transiciones.clear();
+                this.transicionesLamba.clear();
                 BufferedReader reader = new BufferedReader(new FileReader(fichero));
                 String line;
                 reader.readLine(); //TIPO:
@@ -105,6 +128,7 @@ public class AFND implements IAutomataFinitoNoDeterminista {
                     }
                     parts = line.split(" ");
                     if (parts.length >= 3) {
+                        System.out.println("ENTRA");
                         Estado inicio = null;
                         ArrayList<Estado> fin = null;
                         for (int i = 0; i < this.estados.size(); i++) {
@@ -114,6 +138,7 @@ public class AFND implements IAutomataFinitoNoDeterminista {
                         }
                         for (int i = 0; i < this.estados.size(); i++) {
                             for (int j = 2; j < parts.length; j++) {
+                                System.out.println(parts[j]);
                                 if (this.estados.get(i).getNombre().equals(parts[j])) {
                                     fin.add(this.estados.get(i));
                                     break;
