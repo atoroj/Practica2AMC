@@ -1,8 +1,7 @@
 package Modelo;
 
-import Interfaces.ITransicionAFD;
 
-public class TransicionAFD implements ITransicionAFD{
+public class TransicionAFD{
 
     private Estado estadoInicial;
     private Estado estadoFinal;
@@ -14,17 +13,14 @@ public class TransicionAFD implements ITransicionAFD{
         this.simbolo = simbolo;
     }
 
-    @Override
     public Estado getEstadoInicial() {
         return estadoInicial;
     }
 
-    @Override
     public Estado getEstadoFinal() {
         return estadoFinal;
     }
 
-    @Override
     public char getSimbolo() {
         return simbolo;
     }

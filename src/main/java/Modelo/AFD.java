@@ -1,6 +1,5 @@
 package Modelo;
 
-import Interfaces.IAutomataFinitoDeterminista;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -8,7 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
 
-public class AFD implements IAutomataFinitoDeterminista {
+public class AFD {
 
     private ArrayList<Estado> estados;
     private ArrayList<TransicionAFD> transiciones;
@@ -57,7 +56,6 @@ public class AFD implements IAutomataFinitoDeterminista {
         return estadoResult;
     }
 
-    @Override
     public boolean reconocer(String cadena) {
         char[] simbolo = cadena.toCharArray();
         Estado estado = null;
@@ -76,11 +74,6 @@ public class AFD implements IAutomataFinitoDeterminista {
         return esFinal(estado);
     }
 
-    public static AFD pedir() {
-        return null;
-    }
-
-    @Override
     public void load(String filePath) throws Exception {
         File fichero = new File(filePath);
         if (fichero.exists()) {
@@ -144,7 +137,6 @@ public class AFD implements IAutomataFinitoDeterminista {
         }
     }
 
-    @Override
     public String write(String nombre, ArrayList<Estado> estados, Estado inicial, ArrayList<Estado> finales, ArrayList<TransicionAFD> transiciones) {
         File file = new File("src\\main\\resources\\" + nombre + ".txt");
         try {
@@ -177,7 +169,6 @@ public class AFD implements IAutomataFinitoDeterminista {
         return file.toString();
     }
 
-    @Override
     public boolean esFinal(Estado estado) {
         return estado.isNodoFinal();
     }

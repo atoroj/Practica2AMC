@@ -1,9 +1,8 @@
 package Modelo;
 
-import Interfaces.ITransicionAFND;
 import java.util.ArrayList;
 
-public class TransicionLambda implements ITransicionAFND {
+public class TransicionLambda{
 
     private Estado estadoInicial;
     private ArrayList<Estado> estadosFinales;
@@ -15,17 +14,14 @@ public class TransicionLambda implements ITransicionAFND {
         this.simbolo = 'l';
     }
 
-    @Override
     public Estado getEstadoInicial() {
         return estadoInicial;
     }
 
-    @Override
     public ArrayList<Estado> getEstadosFinales() {
         return estadosFinales;
     }
 
-    @Override
     public char getSimbolo() {
         return simbolo;
     }

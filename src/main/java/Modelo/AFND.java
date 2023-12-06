@@ -1,6 +1,5 @@
 package Modelo;
 
-import Interfaces.IAutomataFinitoNoDeterminista;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -8,16 +7,21 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
 
-public class AFND implements IAutomataFinitoNoDeterminista {
+public class AFND {
 
     private ArrayList<Estado> estados;
     private ArrayList<TransicionAFND> transiciones;
     private ArrayList<TransicionLambda> transicionesLamba;
+    private ArrayList<TransicionMacroestado> transicionesMacroestados;
+    private ArrayList<Character> simbolosDistintos;
+    private int contadorMacroestados = 0;
 
     public AFND() {
         this.estados = new ArrayList<>();
         this.transiciones = new ArrayList<>();
         this.transicionesLamba = new ArrayList<>();
+        this.simbolosDistintos = new ArrayList<>();
+        this.transicionesMacroestados = new ArrayList<>();
     }
 
     public AFND(ArrayList<Estado> estados, ArrayList<TransicionAFND> transiciones, ArrayList<TransicionLambda> transicionesLamba) {
@@ -50,42 +54,105 @@ public class AFND implements IAutomataFinitoNoDeterminista {
         this.transicionesLamba = transicionesLamba;
     }
 
-    private ArrayList<Estado> transicion(Estado estado, char simbolo) {
-        return null;
-    }
+    public MacroEstado transicion(MacroEstado macroestado, char simbolo) {
+        ArrayList<Estado> estadosResult = new ArrayList<Estado>();
+        ArrayList<Estado> estadosaux = new ArrayList<Estado>();
+        MacroEstado macroestadoResut = new MacroEstado();
+        //Primera parte
+        for (Estado estado : macroestado.getEstados()) {
+            for (TransicionAFND transicionAFND : transiciones) {
+                if (transicionAFND.getEstadoInicial().getNombre().equals(estado.getNombre()) && transicionAFND.getSimbolo() == simbolo) {
+                    estadosResult.addAll(transicionAFND.getEstadosFinales());
+                }
+            }
+        }
 
-    public ArrayList<Estado> transicion(ArrayList<Estado> macroestado, char simbolo) {
-        return null;
+        //Segunda parte
+        for (Estado estado : estadosResult) {
+            estadosaux.addAll(transicionLamda(estado));
+        }
+
+        estadosResult.addAll(estadosaux);
+        macroestadoResut.setNombre("Q" + contadorMacroestados);
+        contadorMacroestados++;
+        macroestadoResut.setEstados(estadosResult);
+
+        return macroestadoResut;
     }
 
     public ArrayList<Estado> transicionLamda(Estado estado) {
+        for (TransicionLambda transicionLambda : transicionesLamba) {
+            if (transicionLambda.getEstadoInicial().getNombre().equals(estado.getNombre())) {
+                return transicionLambda.getEstadosFinales();
+            }
+        }
         return null;
     }
 
-    public boolean esFinal(ArrayList<Estado> macroestado) {
+    public boolean esFinal(MacroEstado macroestado) {
+        for (Estado estado : macroestado.getEstados()) {
+            if (estado.isNodoFinal()) {
+                return true;
+            }
+        }
         return false;
     }
 
-    private ArrayList<Estado> lamda_clausura(Estado[] macroestado) {
-        return null;
+    //Recoge el macroestado comprendido por los estados
+    private ArrayList<Estado> lamda_clausura(ArrayList<Estado> estados) {
+        ArrayList<Estado> macroEstados = new ArrayList<>();
+        return macroEstados;
     }
 
-    @Override
+    //Recoge el macroestado inicial
+    private ArrayList<Estado> lamda_clausura_inicial(ArrayList<Estado> estados) {
+        ArrayList<Estado> macroEstados = new ArrayList<>();
+        for (Estado estado : estados) {
+            if (estado.isNodoInicial()) {
+                macroEstados.add(estado);
+                macroEstados.addAll(transicionLamda(estado));
+            }
+        }
+        return macroEstados;
+    }
+
     public boolean reconocer(String cadena) {
         char[] simbolo = cadena.toCharArray();
-        Estado[] estado = null;
-        ArrayList<Estado> macroestado = lamda_clausura(estado);
-        for (int i = 0; i < simbolo.length; i++) {
-            macroestado = transicion(macroestado, simbolo[i]);
+        boolean existeMacroestado = false;
+        ArrayList<MacroEstado> macroestados = new ArrayList<>();
+        MacroEstado macroEstadoResult = null;
+        macroestados.add(new MacroEstado("Q0", lamda_clausura_inicial(estados)));
+
+        //Iterando cada estado dentro de los macroestados resultantes
+        for (MacroEstado macroestadoActual : macroestados) {
+            //Iterando por cada caracter distinto dentro de cada macroestado
+            for (Character simboloActual : simbolosDistintos) {
+                //Obtenemos el macroestado al que apunta macroestadoActual con el simboloActual
+                macroEstadoResult = transicion(macroestadoActual, simboloActual);
+                transicionesMacroestados.add(new TransicionMacroestado(macroestadoActual, macroEstadoResult, simboloActual));
+                //En este for comprobamos si el macroestadoResult está introducido dentro del ArrayList de macroestados
+                for (MacroEstado macroestado1 : macroestados) {
+                    //Si la longitud de los estados de ambos macroestados es distinta sabemos que no está introducido
+                    if (macroestado1.getEstados().size() == macroEstadoResult.getEstados().size()) {
+                        for (int i = 0; i < macroestado1.getEstados().size(); i++) {
+                            if (macroEstadoResult.getEstados().get(i).getNombre().equals(macroestado1.getEstados().get(i).getNombre())) {
+                                existeMacroestado = true;
+                            }
+                        }
+                    } else {
+                        macroestados.add(macroestadoActual);
+                    }
+                }
+                //Si no está introducido se introduce
+                if (!existeMacroestado) {
+                    macroestados.add(macroestadoActual);
+                }
+            }
         }
-        return esFinal(macroestado);
+
+        return esFinal(macroEstadoResult);
     }
 
-    public static AFND pedir() {
-        return null;
-    }
-
-    @Override
     public void load(String filePath) throws Exception {
         File fichero = new File(filePath);
         if (fichero.exists()) {
@@ -128,7 +195,6 @@ public class AFND implements IAutomataFinitoNoDeterminista {
                     }
                     parts = line.split(" ");
                     if (parts.length >= 3) {
-                        System.out.println("ENTRA");
                         Estado inicio = null;
                         ArrayList<Estado> fin = new ArrayList<>();
                         for (int i = 0; i < this.estados.size(); i++) {
@@ -138,13 +204,18 @@ public class AFND implements IAutomataFinitoNoDeterminista {
                         }
                         for (int i = 0; i < this.estados.size(); i++) {
                             for (int j = 2; j < parts.length; j++) {
-                                System.out.println(parts[j]);
                                 if (this.estados.get(i).getNombre().equals(parts[j])) {
                                     fin.add(this.estados.get(i));
                                     break;
                                 }
                             }
                         }
+
+                        //Para guardar los distintos simbolos introducidos para tratarlos en el AFND
+                        if (!simbolosDistintos.contains(parts[1].charAt(1))) {
+                            simbolosDistintos.add(parts[1].charAt(1));
+                        }
+
                         TransicionAFND trans = new TransicionAFND(inicio, parts[1].charAt(1), fin);
                         this.transiciones.add(trans);
                     }
@@ -180,7 +251,6 @@ public class AFND implements IAutomataFinitoNoDeterminista {
         }
     }
 
-    @Override
     public String write(String nombre, ArrayList<Estado> estados, Estado inicial, ArrayList<Estado> finales, ArrayList<TransicionAFND> transiciones, ArrayList<TransicionLambda> transicionesL) {
         File file = new File("src\\main\\resources\\" + nombre + ".txt");
         try {
@@ -227,11 +297,6 @@ public class AFND implements IAutomataFinitoNoDeterminista {
             System.out.println("ERROR: " + e.getLocalizedMessage());
         }
         return file.toString();
-    }
-
-    @Override
-    public boolean esFinal(Estado estado) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }
