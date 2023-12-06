@@ -30,4 +30,9 @@ public class TransicionLambda implements ITransicionAFND {
         return simbolo;
     }
 
+    @Override
+    public String toString() {
+        return estadoInicial + " " + estadosFinales;
+    }
+
 }

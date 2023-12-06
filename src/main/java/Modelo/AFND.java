@@ -9,23 +9,23 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 
 public class AFND implements IAutomataFinitoNoDeterminista {
+
     private ArrayList<Estado> estados;
     private ArrayList<TransicionAFND> transiciones;
     private ArrayList<TransicionLambda> transicionesLamba;
-    
-    public AFND(){
+
+    public AFND() {
         this.estados = new ArrayList<>();
         this.transiciones = new ArrayList<>();
         this.transicionesLamba = new ArrayList<>();
     }
-    
+
     public AFND(ArrayList<Estado> estados, ArrayList<TransicionAFND> transiciones, ArrayList<TransicionLambda> transicionesLamba) {
         this.estados = estados;
         this.transiciones = transiciones;
         this.transicionesLamba = transicionesLamba;
     }
-    
-    
+
     public ArrayList<Estado> getEstados() {
         return estados;
     }
@@ -49,7 +49,7 @@ public class AFND implements IAutomataFinitoNoDeterminista {
     public void setTransicionesLamba(ArrayList<TransicionLambda> transicionesLamba) {
         this.transicionesLamba = transicionesLamba;
     }
-    
+
     private ArrayList<Estado> transicion(Estado estado, char simbolo) {
         return null;
     }
@@ -130,7 +130,7 @@ public class AFND implements IAutomataFinitoNoDeterminista {
                     if (parts.length >= 3) {
                         System.out.println("ENTRA");
                         Estado inicio = null;
-                        ArrayList<Estado> fin = null;
+                        ArrayList<Estado> fin = new ArrayList<>();
                         for (int i = 0; i < this.estados.size(); i++) {
                             if (this.estados.get(i).getNombre().equals(parts[0])) {
                                 inicio = this.estados.get(i);
@@ -156,7 +156,7 @@ public class AFND implements IAutomataFinitoNoDeterminista {
                     parts = line.split(" ");
                     if (parts.length >= 2) {
                         Estado inicio = null;
-                        ArrayList<Estado> finales = null;
+                        ArrayList<Estado> finales = new ArrayList<>();
                         for (int i = 0; i < this.estados.size(); i++) {
                             if (this.estados.get(i).getNombre().equals(parts[0])) {
                                 inicio = this.estados.get(i);
@@ -202,27 +202,29 @@ public class AFND implements IAutomataFinitoNoDeterminista {
             writer.write("TRANSICIONES:");
             writer.newLine();
             for (int i = 0; i < transiciones.size(); i++) {
-               String estadosFinales = "";
-                for (int j = 0; j < transiciones.size(); j++) {
-                    estadosFinales += transicionesL.get(i).getEstadosFinales().get(j).getNombre()+" ";
+                String estadosFinales = "";
+                for (int j = 0; j < transiciones.get(i).getEstadosFinales().size(); j++) {
+                    estadosFinales += transiciones.get(i).getEstadosFinales().get(j).getNombre() + " ";
                 }
-                writer.write(transiciones.get(i).getEstadoInicial()+" "+estadosFinales);
+                writer.write(transiciones.get(i).getEstadoInicial() + " '" + transiciones.get(i).getSimbolo() + "' " + estadosFinales);
                 writer.newLine();
             }
             writer.write("TRANSICIONES LAMBDA:");
             writer.newLine();
-            for (int i = 0; i < transicionesL.size(); i++) {
-                String estadosFinalesL  = "";
-                for (int j = 0; j < transicionesL.get(i).getEstadosFinales().size(); j++) {
-                    estadosFinalesL += transicionesL.get(i).getEstadosFinales().get(j).getNombre()+" ";
+            if (!transicionesL.isEmpty()) {
+                for (int i = 0; i < transicionesL.size(); i++) {
+                    String estadosFinalesL = "";
+                    for (int j = 0; j < transicionesL.get(i).getEstadosFinales().size(); j++) {
+                        estadosFinalesL += transicionesL.get(i).getEstadosFinales().get(j).getNombre() + " ";
+                    }
+                    writer.write(transicionesL.get(i).getEstadoInicial() + " " + estadosFinalesL);
+                    writer.newLine();
                 }
-                writer.write(transicionesL.get(i).getEstadoInicial()+ " "+estadosFinalesL);
-                writer.newLine();
             }
             writer.write("FIN");
             writer.flush();
         } catch (Exception e) {
-            System.out.println("ERROR: " + e.getMessage());
+            System.out.println("ERROR: " + e.getLocalizedMessage());
         }
         return file.toString();
     }

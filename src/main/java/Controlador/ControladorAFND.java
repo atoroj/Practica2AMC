@@ -36,7 +36,7 @@ public class ControladorAFND implements ActionListener {
     private ArrayList<Estado> finales;
     private ArrayList<TransicionAFND> transiciones;
     private ArrayList<TransicionLambda> transicionesLambda;
-    
+
     private VistaAFDFrame vistaAFNDFrame;
     private VistaPrincipalPanel vistaAFNDPrincipalPanel;
     private VistaCargarFicheroPanel vistaAFNDCargarFicheroPanel;
@@ -65,7 +65,7 @@ public class ControladorAFND implements ActionListener {
         this.vistaAFNDFrame.add(vistaAFNDMostrarResultadosPanel);
         this.vistaAFNDFrame.add(vistaAFNDComprobarCadenaPanel);
         this.vistaAFNDFrame.setLocationRelativeTo(null);
-        this.vistaAFNDFrame.setTitle("Vista AFD Principal");
+        this.vistaAFNDFrame.setTitle("Vista AFND Principal");
 
         this.vistaAFNDPrincipalPanel.setVisible(true);
         this.vistaAFNDCargarDatosPanel.setVisible(false);
@@ -91,7 +91,7 @@ public class ControladorAFND implements ActionListener {
                     afnd.load("src\\main\\resources\\" + vistaAFNDCargarFicheroPanel.txtNombreFichero.getText());
                     System.out.println("Estados: " + afnd.getEstados());
                     System.out.println("Transiciones: " + afnd.getTransiciones());
-                    System.out.println("Transiciones Lambda: "+afnd.getTransicionesLamba());
+                    System.out.println("Transiciones Lambda: " + afnd.getTransicionesLamba());
                 } catch (Exception ex) {
                     ex.getMessage();
                 }
@@ -124,11 +124,12 @@ public class ControladorAFND implements ActionListener {
                 System.out.println("Inicial " + inicial);
                 System.out.println("Finales " + finales);
                 System.out.println("transiciones " + transiciones);
+                System.out.println("transicionesLambda " + transicionesLambda);
 
                 vistaAFNDCargarDatosPanel.chbxNodoInicial.setVisible(true);
 
                 try {
-                   // afnd.load(afnd.write("prueba", estados, inicial, finales, transiciones));
+                    afnd.write("pruebaAFND", estados, inicial, finales, transiciones, transicionesLambda);
                 } catch (Exception ex) {
                     Logger.getLogger(ControladorAFD.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -183,21 +184,26 @@ public class ControladorAFND implements ActionListener {
         inicial = new Estado();
         finales = new ArrayList<>();
         transiciones = new ArrayList<>();
+        transicionesLambda = new ArrayList<>();
     }
 
-    //TO DO: COMPROBAR QUE NO SE PUEDA FINALIZAR EL PROCESO SIN EXISTIR UN NODO INICIAL Y UN NODO FINAL
     public void introducirTransiciones(JTextField e1, JTextField simbolo, JTextField e2, JCheckBox chbxInicial, JCheckBox chbxFinal) {
 
-        boolean existeE1 = false, existeE2 = false;
+        boolean existeE1 = false, existeE2 = false, transicionExiste = false, transicionLambdaExiste = false;
 
-        for (TransicionAFND transicion : transiciones) {
-            if (transicion.getEstadoInicial().getNombre().equals(e1.getText()) && transicion.getSimbolo() == simbolo.getText().charAt(0)) {
-                e1.setText("");
-                e2.setText("");
-                simbolo.setText("");
-                VistaDialog vistaDialog = new VistaDialog();
-                vistaDialog.mensaje("Ya existe una transicion con ese estado inicial y simbolo, por favor introduce otra transición");
-                return;
+        if ("l".equals(simbolo.getText())) {
+            for (TransicionLambda transicionLambda : transicionesLambda) {
+                if (transicionLambda.getEstadoInicial().getNombre().equals(e1.getText())) {
+                    transicionLambda.getEstadosFinales().add(new Estado(e2.getText()));
+                    transicionLambdaExiste = true;
+                }
+            }
+        } else {
+            for (TransicionAFND transicion : transiciones) {
+                if (transicion.getEstadoInicial().getNombre().equals(e1.getText()) && transicion.getSimbolo() == simbolo.getText().charAt(0)) {
+                    transicion.getEstadosFinales().add(new Estado(e2.getText()));
+                    transicionExiste = true;
+                }
             }
         }
 
@@ -228,7 +234,19 @@ public class ControladorAFND implements ActionListener {
             finales.add(new Estado(e2.getText()));
             chbxFinal.setSelected(false);
         }
-//        transiciones.add(new TransicionAFD(new Estado(e1.getText()), simbolo.getText().charAt(0), new Estado(e2.getText())));
+
+        if (!transicionExiste && !simbolo.getText().equals("l")) {
+            ArrayList<Estado> estadosFinales = new ArrayList<>();
+            estadosFinales.add(new Estado(e2.getText()));
+            transiciones.add(new TransicionAFND(new Estado(e1.getText()), simbolo.getText().charAt(0), estadosFinales));
+        }
+        
+        if (!transicionLambdaExiste && simbolo.getText().equals("l")) {
+            ArrayList<Estado> estadosFinales = new ArrayList<>();
+            estadosFinales.add(new Estado(e2.getText()));
+            transicionesLambda.add(new TransicionLambda(new Estado(e1.getText()), estadosFinales));
+            System.out.println("RECOGE LAMBDA");
+        }
 
         e1.setText("");
         e2.setText("");
