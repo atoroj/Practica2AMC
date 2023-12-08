@@ -55,8 +55,8 @@ public class AFND {
     }
 
     public MacroEstado transicion(MacroEstado macroestado, char simbolo) {
-        ArrayList<Estado> estadosResult = new ArrayList<Estado>();
-        ArrayList<Estado> estadosaux = new ArrayList<Estado>();
+        ArrayList<Estado> estadosResult = new ArrayList<>();
+        ArrayList<Estado> estadosaux = new ArrayList<>();
         MacroEstado macroestadoResut = new MacroEstado();
         //Primera parte
         for (Estado estado : macroestado.getEstados()) {
@@ -69,10 +69,14 @@ public class AFND {
 
         //Segunda parte
         for (Estado estado : estadosResult) {
-            estadosaux.addAll(transicionLamda(estado));
+            if (transicionLamda(estado) != null) {
+                estadosaux.addAll(transicionLamda(estado));
+            }
         }
 
-        estadosResult.addAll(estadosaux);
+        if (!estadosaux.isEmpty()) {
+            estadosResult.addAll(estadosaux);
+        }
         macroestadoResut.setNombre("Q" + contadorMacroestados);
         contadorMacroestados++;
         macroestadoResut.setEstados(estadosResult);
@@ -90,6 +94,9 @@ public class AFND {
     }
 
     public boolean esFinal(MacroEstado macroestado) {
+        if (macroestado.getNombre().equals("M")) {
+            return false;
+        }
         for (Estado estado : macroestado.getEstados()) {
             if (estado.isNodoFinal()) {
                 return true;
@@ -121,48 +128,59 @@ public class AFND {
         boolean existeMacroestado = false;
         ArrayList<MacroEstado> macroestados = new ArrayList<>();
         MacroEstado macroEstadoResult = null;
-        macroestados.add(new MacroEstado("Q0", lamda_clausura_inicial(estados)));
+        MacroEstado macroEstadoInicial = new MacroEstado("Q0", lamda_clausura_inicial(estados));
 
         //Iterando cada estado dentro de los macroestados resultantes
-        for (MacroEstado macroestadoActual : macroestados) {
-            //Iterando por cada caracter distinto dentro de cada macroestado
-            for (Character simboloActual : simbolosDistintos) {
-                //Obtenemos el macroestado al que apunta macroestadoActual con el simboloActual
-                macroEstadoResult = transicion(macroestadoActual, simboloActual);
-                transicionesMacroestados.add(new TransicionMacroestado(macroestadoActual, macroEstadoResult, simboloActual));
-                //En este for comprobamos si el macroestadoResult está introducido dentro del ArrayList de macroestados
-                for (MacroEstado macroestado1 : macroestados) {
-                    //Si la longitud de los estados de ambos macroestados es distinta sabemos que no está introducido
-                    if (macroestado1.getEstados().size() == macroEstadoResult.getEstados().size()) {
-                        for (int i = 0; i < macroestado1.getEstados().size(); i++) {
-                            if (macroEstadoResult.getEstados().get(i).getNombre().equals(macroestado1.getEstados().get(i).getNombre())) {
-                                existeMacroestado = true;
-                            }
-                        }
-                    } else {
-                        macroestados.add(macroestadoActual);
-                    }
-                }
-                //Si no está introducido se introduce
-                if (!existeMacroestado) {
-                    macroestados.add(macroestadoActual);
-                }
-            }
+        //for (MacroEstado macroestadoActual : macroestados) {
+        //Iterando por cada caracter distinto dentro de cada macroestado
+        for (Character simboloActual : simbolo) {
+            //Obtenemos el macroestado al que apunta macroestadoActual con el simboloActual
+            macroEstadoResult = transicion(macroEstadoInicial, simboloActual);
+            //transicionesMacroestados.add(new TransicionMacroestado(macroestadoActual, macroEstadoResult, simboloActual));
+//                //En este for comprobamos si el macroestadoResult está introducido dentro del ArrayList de macroestados
+//                for (MacroEstado macroestado1 : macroestados) {
+//                    //Si la longitud de los estados de ambos macroestados es distinta sabemos que no está introducido
+//                    if (macroestado1.getEstados().size() == macroEstadoResult.getEstados().size()) {
+//                        for (int i = 0; i < macroestado1.getEstados().size(); i++) {
+//                            if (macroEstadoResult.getEstados().get(i).getNombre().equals(macroestado1.getEstados().get(i).getNombre())) {
+//                                existeMacroestado = true;
+//                            }
+//                        }
+//                    } else {
+//                        macroestados.add(macroestadoActual);
+//                    }
+//                }
+//                //Si no está introducido se introduce
+//                if (!existeMacroestado) {
+//                    macroestados.add(macroestadoActual);
+//                }
+        }
+        //}
+
+        if (macroEstadoResult == null) {
+            macroEstadoResult.setNombre("M");
         }
 
         return esFinal(macroEstadoResult);
     }
-
-    public void load(String filePath) throws Exception {
+    
+    public boolean[] load(String filePath) throws Exception {
         File fichero = new File(filePath);
+        //El primer elemento indica si el fichero existe o no
+        //El segundo elemento indica si el fichero cargado es de tipo AFND
+        boolean[] booleanResults = new boolean[2];
         if (fichero.exists()) {
+            booleanResults[0] = true;
             try {
                 this.estados.clear();
                 this.transiciones.clear();
                 this.transicionesLamba.clear();
                 BufferedReader reader = new BufferedReader(new FileReader(fichero));
                 String line;
-                reader.readLine(); //TIPO:
+                line = reader.readLine(); //TIPO:
+                if (line.equals("TIPO: AFND")) {
+                    booleanResults[1] = true;
+                }
                 line = reader.readLine(); //ESTADOS: 
                 String[] parts = line.split(" ");
                 for (int i = 1; i < parts.length; i++) {
@@ -249,6 +267,8 @@ public class AFND {
                 System.out.println("ERROR:" + e.getMessage());
             }
         }
+        
+        return booleanResults;
     }
 
     public String write(String nombre, ArrayList<Estado> estados, Estado inicial, ArrayList<Estado> finales, ArrayList<TransicionAFND> transiciones, ArrayList<TransicionLambda> transicionesL) {

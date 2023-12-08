@@ -11,7 +11,6 @@ import Vista.VistaComprobarCadenaPanel;
 import Vista.VistaAFDMostrarResultadosPanel;
 import Vista.VistaDialog;
 import java.awt.CardLayout;
-import java.awt.Checkbox;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -27,19 +26,19 @@ import javax.swing.JTextField;
  */
 public class ControladorAFD implements ActionListener {
 
-    private AFD afd;
+    private final AFD afd;
 
     private ArrayList<Estado> estados;
     private Estado inicial;
     private ArrayList<Estado> finales;
     private ArrayList<TransicionAFD> transiciones;
 
-    private VistaAFDFrame vistaAFDFrame;
-    private VistaPrincipalPanel vistaAFDPrincipalPanel;
-    private VistaCargarFicheroPanel vistaAFDCargarFicheroPanel;
-    private VistaCargarDatosPanel vistaAFDCargarDatosPanel;
-    private VistaAFDMostrarResultadosPanel vistaAFDMostrarResultadosPanel;
-    private VistaComprobarCadenaPanel vistaAFDComprobarCadenaPanel;
+    private final VistaAFDFrame vistaAFDFrame;
+    private final VistaPrincipalPanel vistaAFDPrincipalPanel;
+    private final VistaCargarFicheroPanel vistaAFDCargarFicheroPanel;
+    private final VistaCargarDatosPanel vistaAFDCargarDatosPanel;
+    private final VistaAFDMostrarResultadosPanel vistaAFDMostrarResultadosPanel;
+    private final VistaComprobarCadenaPanel vistaAFDComprobarCadenaPanel;
 
     public ControladorAFD() {
 
@@ -84,16 +83,27 @@ public class ControladorAFD implements ActionListener {
                 cargarPanel(vistaAFDCargarDatosPanel);
                 break;
             case "CargarCFP": {
+                boolean[] existeFichero = new boolean[2];
                 try {
-                    afd.load("src\\main\\resources\\" + vistaAFDCargarFicheroPanel.txtNombreFichero.getText());
+                    existeFichero = afd.load("src\\main\\resources\\" + vistaAFDCargarFicheroPanel.txtNombreFichero.getText());
                     System.out.println("Estados: " + afd.getEstados());
                     System.out.println("Transiciones: " + afd.getTransiciones());
                 } catch (Exception ex) {
                     ex.getMessage();
                 }
 
-                this.vistaAFDFrame.setTitle("Comprobar Cadena");
-                cargarPanel(vistaAFDComprobarCadenaPanel);
+                if (existeFichero[0] && existeFichero[1]) {
+                    this.vistaAFDFrame.setTitle("Comprobar Cadena");
+                    cargarPanel(vistaAFDComprobarCadenaPanel);
+                } else if (existeFichero[0] && !existeFichero[1]) {
+                    vistaAFDCargarFicheroPanel.txtNombreFichero.setText("");
+                    VistaDialog vistaDialog = new VistaDialog();
+                    vistaDialog.mensaje("ERROR: El fichero no es de tipo AFD");
+                } else if (!existeFichero[0]) {
+                    vistaAFDCargarFicheroPanel.txtNombreFichero.setText("");
+                    VistaDialog vistaDialog = new VistaDialog();
+                    vistaDialog.mensaje("ERROR: No se ha encontrado el fichero, por favor introduzca de nuevo el fichero");
+                }
             }
             break;
 

@@ -74,15 +74,22 @@ public class AFD {
         return esFinal(estado);
     }
 
-    public void load(String filePath) throws Exception {
+    public boolean[] load(String filePath) throws Exception {
         File fichero = new File(filePath);
+        //El primer elemento indica si el fichero existe o no
+        //El segundo elemento indica si el fichero cargado es de tipo AFND
+        boolean[] booleanResults = new boolean[2];
         if (fichero.exists()) {
+            booleanResults[0] = true;
             try {
                 this.estados.clear();
                 this.transiciones.clear();
                 BufferedReader reader = new BufferedReader(new FileReader(fichero));
                 String line;
-                reader.readLine(); //TIPO:
+                line = reader.readLine(); //TIPO:
+                if (line.equals("TIPO: AFD")) {
+                    booleanResults[1] = true;
+                }
                 line = reader.readLine(); //ESTADOS: 
                 String[] parts = line.split(" ");
                 for (int i = 1; i < parts.length; i++) {
@@ -135,6 +142,7 @@ public class AFD {
                 System.out.println("ERROR:" + e.getMessage());
             }
         }
+        return booleanResults;
     }
 
     public String write(String nombre, ArrayList<Estado> estados, Estado inicial, ArrayList<Estado> finales, ArrayList<TransicionAFD> transiciones) {

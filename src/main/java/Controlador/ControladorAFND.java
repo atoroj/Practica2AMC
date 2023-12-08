@@ -1,9 +1,7 @@
 package Controlador;
 
-import Modelo.AFD;
 import Modelo.AFND;
 import Modelo.Estado;
-import Modelo.TransicionAFD;
 import Modelo.TransicionAFND;
 import Modelo.TransicionLambda;
 import Vista.VistaCargarDatosPanel;
@@ -11,7 +9,7 @@ import Vista.VistaAFDFrame;
 import Vista.VistaPrincipalPanel;
 import Vista.VistaCargarFicheroPanel;
 import Vista.VistaComprobarCadenaPanel;
-import Vista.VistaAFDMostrarResultadosPanel;
+import Vista.VistaAFNDMostrarResultadosPanel;
 import Vista.VistaDialog;
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
@@ -29,7 +27,7 @@ import javax.swing.JTextField;
  */
 public class ControladorAFND implements ActionListener {
 
-    private AFND afnd;
+    private final AFND afnd;
 
     private ArrayList<Estado> estados;
     private Estado inicial;
@@ -37,12 +35,12 @@ public class ControladorAFND implements ActionListener {
     private ArrayList<TransicionAFND> transiciones;
     private ArrayList<TransicionLambda> transicionesLambda;
 
-    private VistaAFDFrame vistaAFNDFrame;
-    private VistaPrincipalPanel vistaAFNDPrincipalPanel;
-    private VistaCargarFicheroPanel vistaAFNDCargarFicheroPanel;
-    private VistaCargarDatosPanel vistaAFNDCargarDatosPanel;
-    private VistaAFDMostrarResultadosPanel vistaAFNDMostrarResultadosPanel;
-    private VistaComprobarCadenaPanel vistaAFNDComprobarCadenaPanel;
+    private final VistaAFDFrame vistaAFNDFrame;
+    private final VistaPrincipalPanel vistaAFNDPrincipalPanel;
+    private final VistaCargarFicheroPanel vistaAFNDCargarFicheroPanel;
+    private final VistaCargarDatosPanel vistaAFNDCargarDatosPanel;
+    private final VistaAFNDMostrarResultadosPanel vistaAFNDMostrarResultadosPanel;
+    private final VistaComprobarCadenaPanel vistaAFNDComprobarCadenaPanel;
 
     public ControladorAFND() {
 
@@ -51,7 +49,7 @@ public class ControladorAFND implements ActionListener {
         vistaAFNDFrame = new VistaAFDFrame();
         vistaAFNDPrincipalPanel = new VistaPrincipalPanel();
         vistaAFNDCargarFicheroPanel = new VistaCargarFicheroPanel();
-        vistaAFNDMostrarResultadosPanel = new VistaAFDMostrarResultadosPanel();
+        vistaAFNDMostrarResultadosPanel = new VistaAFNDMostrarResultadosPanel();
         vistaAFNDCargarDatosPanel = new VistaCargarDatosPanel();
         vistaAFNDComprobarCadenaPanel = new VistaComprobarCadenaPanel();
 
@@ -87,17 +85,27 @@ public class ControladorAFND implements ActionListener {
                 cargarPanel(vistaAFNDCargarDatosPanel);
                 break;
             case "CargarCFP": {
+                boolean[] existeFichero = new boolean[2];
                 try {
-                    afnd.load("src\\main\\resources\\" + vistaAFNDCargarFicheroPanel.txtNombreFichero.getText());
+                    existeFichero = afnd.load("src\\main\\resources\\" + vistaAFNDCargarFicheroPanel.txtNombreFichero.getText());
                     System.out.println("Estados: " + afnd.getEstados());
                     System.out.println("Transiciones: " + afnd.getTransiciones());
                     System.out.println("Transiciones Lambda: " + afnd.getTransicionesLamba());
                 } catch (Exception ex) {
                     ex.getMessage();
                 }
-
-                this.vistaAFNDFrame.setTitle("Comprobar Cadena");
-                cargarPanel(vistaAFNDComprobarCadenaPanel);
+                if (existeFichero[0] && existeFichero[1]) {
+                    this.vistaAFNDFrame.setTitle("Comprobar Cadena");
+                    cargarPanel(vistaAFNDComprobarCadenaPanel);
+                } else if (existeFichero[0] && !existeFichero[1]) {
+                    vistaAFNDCargarFicheroPanel.txtNombreFichero.setText("");
+                    VistaDialog vistaDialog = new VistaDialog();
+                    vistaDialog.mensaje("ERROR: El fichero no es de tipo AFND");
+                } else if (!existeFichero[0]) {
+                    vistaAFNDCargarFicheroPanel.txtNombreFichero.setText("");
+                    VistaDialog vistaDialog = new VistaDialog();
+                    vistaDialog.mensaje("ERROR: No se ha encontrado el fichero, por favor introduzca de nuevo el fichero");
+                }
             }
             break;
 
@@ -143,8 +151,9 @@ public class ControladorAFND implements ActionListener {
                 String cadenaEstados = "",
                  cadenaInicial = "",
                  cadenaFinal = "",
-                 cadenaTransiciones = "";
-                vistaAFNDMostrarResultadosPanel.lblTipoValor.setText("AFD");
+                 cadenaTransiciones = "",
+                 cadenaTransicionesLambda = "";
+                vistaAFNDMostrarResultadosPanel.lblTipoValor.setText("AFND");
                 for (Estado estado : afnd.getEstados()) {
                     cadenaEstados += estado.getNombre() + " ";
                     if (estado.isNodoInicial()) {
@@ -157,11 +166,16 @@ public class ControladorAFND implements ActionListener {
                 for (TransicionAFND transicion : afnd.getTransiciones()) {
                     cadenaTransiciones += transicion + "\n";
                 }
+                for (TransicionLambda transicionLambda : afnd.getTransicionesLamba()) {
+                    cadenaTransicionesLambda += transicionLambda + "\n";
+                }
                 vistaAFNDMostrarResultadosPanel.lblEstadosValor.setText(cadenaEstados);
                 vistaAFNDMostrarResultadosPanel.lblInicialValor.setText(cadenaInicial);
                 vistaAFNDMostrarResultadosPanel.lblFinalesValor.setText(cadenaFinal);
                 vistaAFNDMostrarResultadosPanel.txtATransiciones.setText(cadenaTransiciones);
                 vistaAFNDMostrarResultadosPanel.txtATransiciones.setEditable(false);
+                vistaAFNDMostrarResultadosPanel.txtATransicionesLambda.setText(cadenaTransicionesLambda);
+                vistaAFNDMostrarResultadosPanel.txtATransicionesLambda.setEditable(false);
 
                 if (afnd.reconocer(vistaAFNDComprobarCadenaPanel.txtComprobarCadena.getText())) {
                     vistaAFNDMostrarResultadosPanel.lblResultadoValor.setText("EXISTE");
@@ -240,7 +254,7 @@ public class ControladorAFND implements ActionListener {
             estadosFinales.add(new Estado(e2.getText()));
             transiciones.add(new TransicionAFND(new Estado(e1.getText()), simbolo.getText().charAt(0), estadosFinales));
         }
-        
+
         if (!transicionLambdaExiste && simbolo.getText().equals("l")) {
             ArrayList<Estado> estadosFinales = new ArrayList<>();
             estadosFinales.add(new Estado(e2.getText()));
@@ -259,6 +273,12 @@ public class ControladorAFND implements ActionListener {
         this.vistaAFNDCargarFicheroPanel.setVisible(false);
         this.vistaAFNDMostrarResultadosPanel.setVisible(false);
         this.vistaAFNDComprobarCadenaPanel.setVisible(false);
+
+        if (panel.getClass() == vistaAFNDMostrarResultadosPanel.getClass()) {
+            vistaAFNDFrame.setSize(459, 390);
+        } else {
+            vistaAFNDFrame.setSize(400, 300);
+        }
 
         panel.setVisible(true);
     }
