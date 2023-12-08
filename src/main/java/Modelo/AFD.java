@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class AFD {
 
@@ -145,8 +146,14 @@ public class AFD {
         return booleanResults;
     }
 
-    public String write(String nombre, ArrayList<Estado> estados, Estado inicial, ArrayList<Estado> finales, ArrayList<TransicionAFD> transiciones) {
-        File file = new File("src\\main\\resources\\" + nombre + ".txt");
+    public String write(ArrayList<Estado> estados, Estado inicial, ArrayList<Estado> finales, ArrayList<TransicionAFD> transiciones) {
+        
+        int numero = 0;
+        Random rand = new Random();
+        rand.setSeed(System.currentTimeMillis());
+        numero = rand.nextInt(100);
+        
+        File file = new File("src\\main\\resources\\AFD" + numero + ".txt");
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(file.toString()));
             writer.write("TIPO: AFD");

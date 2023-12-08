@@ -137,7 +137,7 @@ public class ControladorAFND implements ActionListener {
                 vistaAFNDCargarDatosPanel.chbxNodoInicial.setVisible(true);
 
                 try {
-                    afnd.write("pruebaAFND", estados, inicial, finales, transiciones, transicionesLambda);
+                    afnd.write(estados, inicial, finales, transiciones, transicionesLambda);
                 } catch (Exception ex) {
                     Logger.getLogger(ControladorAFD.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -178,9 +178,9 @@ public class ControladorAFND implements ActionListener {
                 vistaAFNDMostrarResultadosPanel.txtATransicionesLambda.setEditable(false);
 
                 if (afnd.reconocer(vistaAFNDComprobarCadenaPanel.txtComprobarCadena.getText())) {
-                    vistaAFNDMostrarResultadosPanel.lblResultadoValor.setText("EXISTE");
+                    vistaAFNDMostrarResultadosPanel.lblResultadoValor.setText("ACEPTADO");
                 } else {
-                    vistaAFNDMostrarResultadosPanel.lblResultadoValor.setText("NO EXISTE");
+                    vistaAFNDMostrarResultadosPanel.lblResultadoValor.setText("RECHAZADO");
                 }
                 this.vistaAFNDFrame.setTitle("Mostrar Resultados");
                 cargarPanel(vistaAFNDMostrarResultadosPanel);
