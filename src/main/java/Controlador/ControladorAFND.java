@@ -90,7 +90,7 @@ public class ControladorAFND implements ActionListener {
                     existeFichero = afnd.load("src\\main\\resources\\" + vistaAFNDCargarFicheroPanel.txtNombreFichero.getText());
                     System.out.println("Estados: " + afnd.getEstados());
                     System.out.println("Transiciones: " + afnd.getTransiciones());
-                    System.out.println("Transiciones Lambda: " + afnd.getTransicionesLamba());
+                    System.out.println("Transiciones Lambda: " + afnd.getTransicionesLambda());
                 } catch (Exception ex) {
                     ex.getMessage();
                 }
@@ -166,7 +166,7 @@ public class ControladorAFND implements ActionListener {
                 for (TransicionAFND transicion : afnd.getTransiciones()) {
                     cadenaTransiciones += transicion + "\n";
                 }
-                for (TransicionLambda transicionLambda : afnd.getTransicionesLamba()) {
+                for (TransicionLambda transicionLambda : afnd.getTransicionesLambda()) {
                     cadenaTransicionesLambda += transicionLambda + "\n";
                 }
                 vistaAFNDMostrarResultadosPanel.lblEstadosValor.setText(cadenaEstados);

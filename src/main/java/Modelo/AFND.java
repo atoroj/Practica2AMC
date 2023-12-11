@@ -12,7 +12,7 @@ public class AFND {
 
     private ArrayList<Estado> estados;
     private ArrayList<TransicionAFND> transiciones;
-    private ArrayList<TransicionLambda> transicionesLamba;
+    private ArrayList<TransicionLambda> transicionesLambda;
     private ArrayList<TransicionMacroestado> transicionesMacroestados;
     private ArrayList<Character> simbolosDistintos;
     private int contadorMacroestados = 0;
@@ -20,7 +20,7 @@ public class AFND {
     public AFND() {
         this.estados = new ArrayList<>();
         this.transiciones = new ArrayList<>();
-        this.transicionesLamba = new ArrayList<>();
+        this.transicionesLambda = new ArrayList<>();
         this.simbolosDistintos = new ArrayList<>();
         this.transicionesMacroestados = new ArrayList<>();
     }
@@ -28,7 +28,7 @@ public class AFND {
     public AFND(ArrayList<Estado> estados, ArrayList<TransicionAFND> transiciones, ArrayList<TransicionLambda> transicionesLamba) {
         this.estados = estados;
         this.transiciones = transiciones;
-        this.transicionesLamba = transicionesLamba;
+        this.transicionesLambda = transicionesLamba;
     }
 
     public ArrayList<Estado> getEstados() {
@@ -47,12 +47,12 @@ public class AFND {
         this.transiciones = transiciones;
     }
 
-    public ArrayList<TransicionLambda> getTransicionesLamba() {
-        return transicionesLamba;
+    public ArrayList<TransicionLambda> getTransicionesLambda() {
+        return transicionesLambda;
     }
 
-    public void setTransicionesLamba(ArrayList<TransicionLambda> transicionesLamba) {
-        this.transicionesLamba = transicionesLamba;
+    public void setTransicionesLambda(ArrayList<TransicionLambda> transicionesLambda) {
+        this.transicionesLambda = transicionesLambda;
     }
 
     public MacroEstado transicion(MacroEstado macroestado, char simbolo) {
@@ -70,8 +70,8 @@ public class AFND {
 
         //Segunda parte
         for (Estado estado : estadosResult) {
-            if (transicionLamda(estado) != null) {
-                estadosaux.addAll(transicionLamda(estado));
+            if (transicionLambda(estado) != null) {
+                estadosaux.addAll(transicionLambda(estado));
             }
         }
 
@@ -85,15 +85,43 @@ public class AFND {
         return macroestadoResut;
     }
 
-    public ArrayList<Estado> transicionLamda(Estado estado) {
-        for (TransicionLambda transicionLambda : transicionesLamba) {
-            if (transicionLambda.getEstadoInicial().getNombre().equals(estado.getNombre())) {
-                return transicionLambda.getEstadosFinales();
-            }
-        }
-        return null;
+    public ArrayList<Estado> transicionLambda(Estado estado) {
+        ArrayList<Estado> estadosAlcanzables = new ArrayList<>();
+        transicionLambdaRecursivo(estado, estadosAlcanzables, new ArrayList<>());
+        return estadosAlcanzables;
     }
 
+    //Comprueba todos los estados a los que llega por lambda desde el estado pasado por parametro de forma recurrente
+    private void transicionLambdaRecursivo(Estado estado, ArrayList<Estado> estadosAlcanzables, ArrayList<Estado> visitados) {
+        // Evitar ciclos infinitos
+        if (visitados.contains(estado)) {
+            return;
+        }
+
+        visitados.add(estado);
+
+        for (TransicionLambda transicionLambda : transicionesLambda) {
+            if (transicionLambda.getEstadoInicial().getNombre().equals(estado.getNombre())) {
+                for (Estado estadoFinal : transicionLambda.getEstadosFinales()) {
+                    // Agregar el estado final a la lista
+                    estadosAlcanzables.add(estadoFinal);
+                    // Llamada recursiva para explorar más transiciones lambda
+                    transicionLambdaRecursivo(estadoFinal, estadosAlcanzables, visitados);
+                }
+            }
+        }
+    }
+
+//    public ArrayList<Estado> transicionLamda(Estado estado) {
+//        for (TransicionLambda transicionLambda : transicionesLambda) {
+//            if (transicionLambda.getEstadoInicial().getNombre().equals(estado.getNombre())) {
+//                return transicionLambda.getEstadosFinales();
+//            }
+//        }
+//
+//        return null;
+//    }
+    
     public boolean esFinal(MacroEstado macroestado) {
         if (macroestado.getNombre().equals("M")) {
             return false;
@@ -106,19 +134,13 @@ public class AFND {
         return false;
     }
 
-    //Recoge el macroestado comprendido por los estados
-    private ArrayList<Estado> lamda_clausura(ArrayList<Estado> estados) {
-        ArrayList<Estado> macroEstados = new ArrayList<>();
-        return macroEstados;
-    }
-
     //Recoge el macroestado inicial
     private ArrayList<Estado> lamda_clausura_inicial(ArrayList<Estado> estados) {
         ArrayList<Estado> macroEstados = new ArrayList<>();
         for (Estado estado : estados) {
             if (estado.isNodoInicial()) {
                 macroEstados.add(estado);
-                macroEstados.addAll(transicionLamda(estado));
+                macroEstados.addAll(transicionLambda(estado));
             }
         }
         return macroEstados;
@@ -164,7 +186,7 @@ public class AFND {
 
         return esFinal(macroEstadoResult);
     }
-    
+
     public boolean[] load(String filePath) throws Exception {
         File fichero = new File(filePath);
         //El primer elemento indica si el fichero existe o no
@@ -175,7 +197,7 @@ public class AFND {
             try {
                 this.estados.clear();
                 this.transiciones.clear();
-                this.transicionesLamba.clear();
+                this.transicionesLambda.clear();
                 BufferedReader reader = new BufferedReader(new FileReader(fichero));
                 String line;
                 line = reader.readLine(); //TIPO:
@@ -261,14 +283,14 @@ public class AFND {
                             }
                         }
                         TransicionLambda transL = new TransicionLambda(inicio, finales);
-                        this.transicionesLamba.add(transL);
+                        this.transicionesLambda.add(transL);
                     }
                 }
             } catch (Exception e) {
                 System.out.println("ERROR:" + e.getMessage());
             }
         }
-        
+
         return booleanResults;
     }
 
@@ -277,7 +299,7 @@ public class AFND {
         Random rand = new Random();
         rand.setSeed(System.currentTimeMillis());
         numero = rand.nextInt(100);
-        
+
         File file = new File("src\\main\\resources\\AFND" + numero + ".txt");
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(file.toString()));
