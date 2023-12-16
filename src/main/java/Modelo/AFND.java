@@ -109,9 +109,18 @@ public class AFND {
         if (!estadosaux.isEmpty()) {
             estadosResult.addAll(estadosaux);
         }
-        macroestadoResut.setNombre("Q" + contadorMacroestados);
-        contadorMacroestados++;
+        
         macroestadoResut.setEstados(estadosResult);
+        if (!existeMacroestado(macroestadoResut)) {
+            macroestadoResut.setNombre("Q" + contadorMacroestados);
+            contadorMacroestados++;
+        }else{
+            for (MacroEstado estado : macroestados) {
+                if (estado.equals(macroestadoResut)) {
+                    macroestadoResut.setNombre(estado.getNombre());
+                }
+            }
+        }
 
         return macroestadoResut;
     }
@@ -178,7 +187,7 @@ public class AFND {
 
     private boolean existeMacroestado(MacroEstado macro) {
         for (MacroEstado macroestado : macroestados) {
-            if (macroestado.getNombre().equals(macro.getNombre())) {
+            if (macroestado.equals(macro)) {
                 return true;
             }
         }

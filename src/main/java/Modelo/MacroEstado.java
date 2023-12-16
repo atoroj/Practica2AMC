@@ -5,6 +5,7 @@
 package Modelo;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  *
@@ -47,7 +48,7 @@ public class MacroEstado {
         }
         return false;
     }
-    
+
     public boolean esFinal() {
         for (Estado estado : estados) {
             if (estado.isNodoFinal()) {
@@ -56,4 +57,43 @@ public class MacroEstado {
         }
         return false;
     }
+
+    @Override
+    public boolean equals(Object macroEstado) {
+        if (this == macroEstado) {
+            return true;
+        }
+        if (macroEstado == null) {
+            return false;
+        }
+        if (getClass() != macroEstado.getClass()) {
+            return false;
+        }
+        final MacroEstado other = (MacroEstado) macroEstado;
+
+        if (this.nombre.equals(other.getNombre())) {
+            return true;
+        }
+        
+        ArrayList<String> estadosNombre = new ArrayList<>();
+        ArrayList<String> estadosNombreOther = new ArrayList<>();
+
+        for (Estado estado : estados) {
+            estadosNombre.add(estado.getNombre());
+        }
+        
+        for (Estado estado : other.getEstados()) {
+            estadosNombreOther.add(estado.getNombre());
+        }
+        
+        return estadosNombre.equals(estadosNombreOther);
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 97 * hash + Objects.hashCode(this.estados);
+        return hash;
+    }
+
 }
