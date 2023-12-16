@@ -231,7 +231,7 @@ public class ControladorAFD implements ActionListener {
 
                 vv.getRenderContext().setVertexFillPaintTransformer(vertexPaint::apply);
 
-                JFrame frame = new JFrame("Mostrar Grafica AFND");
+                JFrame frame = new JFrame("Mostrar Grafica AFD");
                 frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 frame.getContentPane().add(vv, BorderLayout.CENTER);
                 frame.pack();
