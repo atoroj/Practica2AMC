@@ -39,4 +39,21 @@ public class MacroEstado {
         this.estados = estados;
     }
 
+    public boolean esInicial() {
+        for (Estado estado : estados) {
+            if (estado.isNodoInicial()) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public boolean esFinal() {
+        for (Estado estado : estados) {
+            if (estado.isNodoFinal()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

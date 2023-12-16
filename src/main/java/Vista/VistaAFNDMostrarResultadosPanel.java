@@ -43,6 +43,7 @@ public class VistaAFNDMostrarResultadosPanel extends javax.swing.JPanel {
         lblTransicionesLambda = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtATransicionesLambda = new javax.swing.JTextArea();
+        btnMostarGrafica = new javax.swing.JButton();
 
         lblTipo.setText("TIPO:");
 
@@ -77,6 +78,9 @@ public class VistaAFNDMostrarResultadosPanel extends javax.swing.JPanel {
         txtATransicionesLambda.setRows(5);
         jScrollPane2.setViewportView(txtATransicionesLambda);
 
+        btnMostarGrafica.setText("Mostrar Grafica");
+        btnMostarGrafica.setActionCommand("MostrarGrafica");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -93,9 +97,6 @@ public class VistaAFNDMostrarResultadosPanel extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblResultadoValor)
                         .addGap(63, 63, 63))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnAceptar))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -116,7 +117,11 @@ public class VistaAFNDMostrarResultadosPanel extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblTransicionesLambda)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnMostarGrafica)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnAceptar)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -152,7 +157,9 @@ public class VistaAFNDMostrarResultadosPanel extends javax.swing.JPanel {
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnAceptar)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnAceptar)
+                            .addComponent(btnMostarGrafica))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -160,6 +167,7 @@ public class VistaAFNDMostrarResultadosPanel extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton btnAceptar;
+    public javax.swing.JButton btnMostarGrafica;
     public javax.swing.JScrollPane jScrollPane1;
     public javax.swing.JScrollPane jScrollPane2;
     public javax.swing.JLabel lblEstados;

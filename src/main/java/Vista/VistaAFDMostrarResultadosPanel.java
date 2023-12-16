@@ -40,6 +40,7 @@ public class VistaAFDMostrarResultadosPanel extends javax.swing.JPanel {
         lblEstadosValor = new javax.swing.JLabel();
         lblInicialValor = new javax.swing.JLabel();
         lblFinalesValor = new javax.swing.JLabel();
+        btnMostarGrafica = new javax.swing.JButton();
 
         lblTipo.setText("TIPO:");
 
@@ -68,6 +69,9 @@ public class VistaAFDMostrarResultadosPanel extends javax.swing.JPanel {
 
         lblFinalesValor.setText("jLabel4");
 
+        btnMostarGrafica.setText("Mostrar Grafica");
+        btnMostarGrafica.setActionCommand("MostrarGrafica");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -86,7 +90,9 @@ public class VistaAFDMostrarResultadosPanel extends javax.swing.JPanel {
                         .addGap(63, 63, 63))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 119, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnMostarGrafica)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnAceptar))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -133,7 +139,9 @@ public class VistaAFDMostrarResultadosPanel extends javax.swing.JPanel {
                         .addComponent(lblTransiciones)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(btnAceptar))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnAceptar)
+                        .addComponent(btnMostarGrafica)))
                 .addContainerGap(10, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -141,6 +149,7 @@ public class VistaAFDMostrarResultadosPanel extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton btnAceptar;
+    public javax.swing.JButton btnMostarGrafica;
     public javax.swing.JScrollPane jScrollPane1;
     public javax.swing.JLabel lblEstados;
     public javax.swing.JLabel lblEstadosValor;

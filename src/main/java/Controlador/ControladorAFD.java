@@ -10,6 +10,8 @@ import Vista.VistaCargarFicheroPanel;
 import Vista.VistaComprobarCadenaPanel;
 import Vista.VistaAFDMostrarResultadosPanel;
 import Vista.VistaDialog;
+import edu.uci.ics.jung.algorithms.layout.CircleLayout;
+import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,6 +21,14 @@ import java.util.logging.Logger;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import edu.uci.ics.jung.graph.util.EdgeType;
+import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Paint;
+import java.util.function.Function;
+import javax.swing.JFrame;
 
 /**
  *
@@ -26,7 +36,7 @@ import javax.swing.JTextField;
  */
 public class ControladorAFD implements ActionListener {
 
-    private final AFD afd;
+    private AFD afd;
 
     private ArrayList<Estado> estados;
     private Estado inicial;
@@ -39,6 +49,8 @@ public class ControladorAFD implements ActionListener {
     private final VistaCargarDatosPanel vistaAFDCargarDatosPanel;
     private final VistaAFDMostrarResultadosPanel vistaAFDMostrarResultadosPanel;
     private final VistaComprobarCadenaPanel vistaAFDComprobarCadenaPanel;
+
+    DirectedSparseGraph<String, String> grafo;
 
     public ControladorAFD() {
 
@@ -68,6 +80,7 @@ public class ControladorAFD implements ActionListener {
         this.vistaAFDCargarFicheroPanel.setVisible(false);
         this.vistaAFDMostrarResultadosPanel.setVisible(false);
 
+        grafo = new DirectedSparseGraph<>();
     }
 
     @Override
@@ -83,11 +96,14 @@ public class ControladorAFD implements ActionListener {
                 cargarPanel(vistaAFDCargarDatosPanel);
                 break;
             case "CargarCFP": {
+                inicializarParametros();
                 boolean[] existeFichero = new boolean[2];
                 try {
                     existeFichero = afd.load("src\\main\\resources\\" + vistaAFDCargarFicheroPanel.txtNombreFichero.getText());
-                    System.out.println("Estados: " + afd.getEstados());
-                    System.out.println("Transiciones: " + afd.getTransiciones());
+                    estados = afd.getEstados();
+                    transiciones = afd.getTransiciones();
+                    System.out.println("Estados: " + estados);
+                    System.out.println("Transiciones: " + transiciones);
                 } catch (Exception ex) {
                     ex.getMessage();
                 }
@@ -176,6 +192,53 @@ public class ControladorAFD implements ActionListener {
                 this.vistaAFDFrame.setTitle("Mostrar Resultados");
                 cargarPanel(vistaAFDMostrarResultadosPanel);
                 break;
+
+            case "MostrarGrafica":
+                this.vistaAFDFrame.setTitle("Mostrar gráfica AFD");
+
+                ArrayList<String> macroEstadosFinales = new ArrayList<>();
+
+                for (Estado estado : afd.getEstados()) {
+                    System.out.println("ESTADO " + estado.getNombre());
+                    grafo.addVertex(estado.getNombre());
+                    if (estado.isNodoFinal()) {
+                        macroEstadosFinales.add(estado.getNombre());
+                    }
+                }
+
+                for (TransicionAFD transicion : afd.getTransiciones()) {
+                    System.out.println("TRANSICIONES " + transicion);
+                    String estadoInicial = transicion.getEstadoInicial().getNombre();
+                    String estadoFinal = transicion.getEstadoFinal().getNombre();
+                    grafo.addEdge(estadoInicial + " '" + String.valueOf(transicion.getSimbolo()) + "' " + estadoFinal, transicion.getEstadoInicial().getNombre(), transicion.getEstadoFinal().getNombre(), EdgeType.DIRECTED);
+                }
+
+                VisualizationViewer<String, String> vv = new VisualizationViewer<>(new CircleLayout(grafo));
+
+                vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
+                vv.getRenderContext().setEdgeLabelTransformer(new ToStringLabeller());
+
+                Function<String, Paint> vertexPaint = vertex -> {
+                    // Customize the vertex color based on your logic
+                    if (vertex.equals("q0")) {
+                        return Color.GREEN;
+                    } else if (macroEstadosFinales.contains(vertex)) {
+                        return Color.RED;
+                    } else {
+                        return Color.YELLOW;
+                    }
+                };
+
+                vv.getRenderContext().setVertexFillPaintTransformer(vertexPaint::apply);
+
+                JFrame frame = new JFrame("Mostrar Grafica AFND");
+                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                frame.getContentPane().add(vv, BorderLayout.CENTER);
+                frame.pack();
+                frame.setLocationRelativeTo(null);
+                frame.setVisible(true);
+
+                break;
             case "AceptarMRP":
                 this.vistaAFDFrame.setTitle("Vista AFD Principal");
                 cargarPanel(vistaAFDPrincipalPanel);
@@ -189,6 +252,7 @@ public class ControladorAFD implements ActionListener {
         inicial = new Estado();
         finales = new ArrayList<>();
         transiciones = new ArrayList<>();
+        afd = new AFD();
     }
 
     //TO DO: COMPROBAR QUE NO SE PUEDA FINALIZAR EL PROCESO SIN EXISTIR UN NODO INICIAL Y UN NODO FINAL
@@ -261,5 +325,6 @@ public class ControladorAFD implements ActionListener {
         this.vistaAFDCargarDatosPanel.btnFinalizar.addActionListener(this);
         this.vistaAFDComprobarCadenaPanel.btnComprobar.addActionListener(this);
         this.vistaAFDMostrarResultadosPanel.btnAceptar.addActionListener(this);
+        this.vistaAFDMostrarResultadosPanel.btnMostarGrafica.addActionListener(this);
     }
 }

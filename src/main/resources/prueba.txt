@@ -4,6 +4,6 @@ INICIAL: q0
 FINALES: q2 
 TRANSICIONES:
 q0 '0' q1
-q0 '0' q1
-q0 '2' q2
+q1 '1' q2
+q0 '1' q2
 FIN

@@ -15,7 +15,8 @@ public class AFND {
     private ArrayList<TransicionLambda> transicionesLambda;
     private ArrayList<TransicionMacroestado> transicionesMacroestados;
     private ArrayList<Character> simbolosDistintos;
-    private int contadorMacroestados = 0;
+    private ArrayList<MacroEstado> macroestados;
+    private int contadorMacroestados;
 
     public AFND() {
         this.estados = new ArrayList<>();
@@ -23,6 +24,8 @@ public class AFND {
         this.transicionesLambda = new ArrayList<>();
         this.simbolosDistintos = new ArrayList<>();
         this.transicionesMacroestados = new ArrayList<>();
+        this.macroestados = new ArrayList<>();
+        this.contadorMacroestados = 0;
     }
 
     public AFND(ArrayList<Estado> estados, ArrayList<TransicionAFND> transiciones, ArrayList<TransicionLambda> transicionesLamba) {
@@ -53,6 +56,34 @@ public class AFND {
 
     public void setTransicionesLambda(ArrayList<TransicionLambda> transicionesLambda) {
         this.transicionesLambda = transicionesLambda;
+    }
+
+    /**
+     * @return the macroestados
+     */
+    public ArrayList<MacroEstado> getMacroestados() {
+        return macroestados;
+    }
+
+    /**
+     * @param macroestados the macroestados to set
+     */
+    public void setMacroestados(ArrayList<MacroEstado> macroestados) {
+        this.macroestados = macroestados;
+    }
+
+    /**
+     * @return the transicionesMacroestados
+     */
+    public ArrayList<TransicionMacroestado> getTransicionesMacroestados() {
+        return transicionesMacroestados;
+    }
+
+    /**
+     * @param transicionesMacroestados the transicionesMacroestados to set
+     */
+    public void setTransicionesMacroestados(ArrayList<TransicionMacroestado> transicionesMacroestados) {
+        this.transicionesMacroestados = transicionesMacroestados;
     }
 
     public MacroEstado transicion(MacroEstado macroestado, char simbolo) {
@@ -121,7 +152,6 @@ public class AFND {
 //
 //        return null;
 //    }
-    
     public boolean esFinal(MacroEstado macroestado) {
         if (macroestado.getNombre().equals("M")) {
             return false;
@@ -146,39 +176,28 @@ public class AFND {
         return macroEstados;
     }
 
+    private boolean existeMacroestado(MacroEstado macro) {
+        for (MacroEstado macroestado : macroestados) {
+            if (macroestado.getNombre().equals(macro.getNombre())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean reconocer(String cadena) {
         char[] simbolo = cadena.toCharArray();
-        boolean existeMacroestado = false;
-        ArrayList<MacroEstado> macroestados = new ArrayList<>();
-        MacroEstado macroEstadoResult = null;
+        MacroEstado macroEstadoResult = new MacroEstado();
         MacroEstado macroEstadoInicial = new MacroEstado("Q0", lamda_clausura_inicial(estados));
 
-        //Iterando cada estado dentro de los macroestados resultantes
-        //for (MacroEstado macroestadoActual : macroestados) {
         //Iterando por cada caracter distinto dentro de cada macroestado
         for (Character simboloActual : simbolo) {
-            //Obtenemos el macroestado al que apunta macroestadoActual con el simboloActual
             macroEstadoResult = transicion(macroEstadoInicial, simboloActual);
-            //transicionesMacroestados.add(new TransicionMacroestado(macroestadoActual, macroEstadoResult, simboloActual));
-//                //En este for comprobamos si el macroestadoResult está introducido dentro del ArrayList de macroestados
-//                for (MacroEstado macroestado1 : macroestados) {
-//                    //Si la longitud de los estados de ambos macroestados es distinta sabemos que no está introducido
-//                    if (macroestado1.getEstados().size() == macroEstadoResult.getEstados().size()) {
-//                        for (int i = 0; i < macroestado1.getEstados().size(); i++) {
-//                            if (macroEstadoResult.getEstados().get(i).getNombre().equals(macroestado1.getEstados().get(i).getNombre())) {
-//                                existeMacroestado = true;
-//                            }
-//                        }
-//                    } else {
-//                        macroestados.add(macroestadoActual);
-//                    }
-//                }
-//                //Si no está introducido se introduce
-//                if (!existeMacroestado) {
-//                    macroestados.add(macroestadoActual);
-//                }
+            transicionesMacroestados.add(new TransicionMacroestado(macroEstadoInicial, macroEstadoResult, simboloActual));
+            if (!existeMacroestado(macroEstadoResult)) {
+                macroestados.add(macroEstadoResult);
+            }
         }
-        //}
 
         if (macroEstadoResult == null) {
             macroEstadoResult.setNombre("M");
