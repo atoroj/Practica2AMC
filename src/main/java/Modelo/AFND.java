@@ -152,15 +152,6 @@ public class AFND {
         }
     }
 
-//    public ArrayList<Estado> transicionLamda(Estado estado) {
-//        for (TransicionLambda transicionLambda : transicionesLambda) {
-//            if (transicionLambda.getEstadoInicial().getNombre().equals(estado.getNombre())) {
-//                return transicionLambda.getEstadosFinales();
-//            }
-//        }
-//
-//        return null;
-//    }
     public boolean esFinal(MacroEstado macroestado) {
         if (macroestado.getNombre().equals("M")) {
             return false;
@@ -196,12 +187,13 @@ public class AFND {
 
     public boolean reconocer(String cadena) {
         char[] simbolo = cadena.toCharArray();
-        MacroEstado macroEstadoResult = new MacroEstado();
-        MacroEstado macroEstadoInicial = new MacroEstado("Q0", lamda_clausura_inicial(estados));
+        MacroEstado macroEstadoResult = new MacroEstado("Q0", lamda_clausura_inicial(estados));
+        MacroEstado macroEstadoInicial = new MacroEstado();
 
         //Iterando por cada caracter distinto dentro de cada macroestado
         for (Character simboloActual : simbolo) {
-            macroEstadoResult = transicion(macroEstadoInicial, simboloActual);
+            macroEstadoInicial = macroEstadoResult;
+            macroEstadoResult = transicion(macroEstadoResult, simboloActual);
             transicionesMacroestados.add(new TransicionMacroestado(macroEstadoInicial, macroEstadoResult, simboloActual));
             if (!existeMacroestado(macroEstadoResult)) {
                 macroestados.add(macroEstadoResult);
